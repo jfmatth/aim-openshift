@@ -4,7 +4,9 @@ import imp, os
 PROJECT_DIR = os.path.dirname(os.path.realpath(__file__))
 # a setting to determine whether we are running on OpenShift
 #if ON_OPENSHIFT:
+ON_OPENSHIFT=False
 if 'OPENSHIFT_REPO_DIR' in os.environ:
+    ON_OPENSHIFT = True
     dbpath=os.environ['OPENSHIFT_DATA_DIR']
     DEBUG = bool(os.environ.get('DEBUG', False))    
     if DEBUG:
@@ -12,10 +14,11 @@ if 'OPENSHIFT_REPO_DIR' in os.environ:
 else:
     dbpath=PROJECT_DIR
     DEBUG = True
+    
 TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = ['*']
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    # ('John Matthew', 'john@compunique.com'),
 )
 MANAGERS = ADMINS
 
@@ -40,7 +43,7 @@ DATABASES = {
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'America/Los_Angeles'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -133,6 +136,16 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_DIR, 'templates'),
 )
 
+STATICFILES_DIRS = (
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    "c:/Users/jmatthew/Development/bootstrap.v300",
+    "c:/Users/jmatthew/Development/jquery",
+    os.path.join(PROJECT_DIR,"static"),
+)
+
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -144,6 +157,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'aim',
+    'loader',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -151,6 +166,11 @@ INSTALLED_APPS = (
 # the site admins on every HTTP 500 error.
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
+if ON_OPENSHIFT:
+    logdir = os.environ['OPENSHIFT_PYTHON_LOG_DIR']
+else:
+    logdir = PROJECT_DIR
+    
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -158,7 +178,18 @@ LOGGING = {
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'logfile': {
+            'level':'INFO',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': logdir + "/application.log",
+            'maxBytes': 50000,
+            'backupCount': 2,
+        },
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+        },
     },
     'loggers': {
         'django.request': {
@@ -166,5 +197,30 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'django.db.backends': {
+            'handlers': ['console', 'logfile'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'loader': {
+            'handlers': ['logfile'],
+            'level': 'DEBUG',
+        },
+        'aim': {
+            'handlers': ['console', 'logfile'],
+            'level': 'DEBUG',
+        },
+
     }
 }
+
+
+
+# EMAIL settings
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'registration@compunique.com'
+EMAIL_HOST_PASSWORD = 'Pa55word'
+
+REGISTRATION_OPEN = True

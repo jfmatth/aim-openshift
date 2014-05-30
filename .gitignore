@@ -1,4 +1,6 @@
 README
+admin.txt
+EODDATA
 *.py[co]
 *.sw[po]
 *.bak
@@ -6,3 +8,4 @@ README
 *~
 .project
 .pydevproject
+.settings
