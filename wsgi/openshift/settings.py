@@ -159,6 +159,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'aim',
     'loader',
+    'registration',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -223,4 +224,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'registration@compunique.com'
 EMAIL_HOST_PASSWORD = 'Pa55word'
 
+# registration settings
 REGISTRATION_OPEN = True
+ACCOUNT_ACTIVATION_DAYS = 20

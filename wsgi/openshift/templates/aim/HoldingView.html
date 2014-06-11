@@ -1,11 +1,11 @@
-{% extends "bootstrap.html" %}
+{% extends "base.html" %}
 
 {% load staticfiles %}
 
 {% block head %}
 	{{ block.super }}
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-		<script type="text/javascript">
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script type="text/javascript">
 		$(function() {
 		
 			$.getJSON('/graph/{{object.symbol}}/', function(data) {
@@ -72,12 +72,14 @@
 			});
 		
 		});
-		
 	</script>
-	<script src="{% static "js/highstock.js" %}"> </script>
 	
+	<script src="{% static "js/highstock.js" %}"> </script>
 
 {% endblock %}
+
+
+
 
 {% block body %}
 
@@ -94,11 +96,12 @@
 		<a href="{% url "main" %} ">Main Portfolio List</a>
 	</div>
 
+{% if object.id %} 
 	{% if object.alert %}
 		{% if object.symbol.currentprice.close < object.currentalert.buyprice %}
 			<div class="alert alert-success">BUY ALERT</div>
 		{% else %}
-		<div class="alert alert-danger">SELL ALERT</div>
+			<div class="alert alert-danger">SELL ALERT</div>
 		{% endif %}
 	{% endif %}
 
@@ -107,7 +110,7 @@
 		<div class="panel-body" id="graph">
 		</div>
 	</div>
-
+{% endif %}
 
 	<form role="form" action="." method="post" >{% csrf_token %}
 		<div class="panel panel-primary">
@@ -137,6 +140,7 @@
 		</div>
 	</form>
 
+{% if object.id %} 
 	<div class="panel panel-primary">
 		<div class="panel-heading">Transactions</div>
 		<div class="panel-body">
@@ -192,8 +196,6 @@
 			{% endif %}
 		</div>
 	</div>
-
-
 	
 	<form role="form" action="." method="post" >{% csrf_token %}
 		<div class="panel panel-primary">
@@ -214,9 +216,7 @@
 		</div>
 	</form>
 	
-
-
-
+{% endif %}
 
 {% if false %}	
 	{{ form.non_field_errors }}

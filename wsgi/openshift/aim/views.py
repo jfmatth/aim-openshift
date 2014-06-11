@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import TemplateView
+from django.shortcuts import get_object_or_404
 
 from aim.forms import PortfolioForm, ControlForm, HoldingForm, TransactionForm
 
@@ -132,15 +133,29 @@ class TransactionCreate(CreateView):
     form_class = TransactionForm
     success_url = "/aim/"
 
+    type = None
+
     def get_queryset(self):
         return Transaction.objects.filter(holding__portfolio__owner = self.request.user)
 
+    def get_form(self, form_class):
+        form = super(TransactionCreate, self).get_form(form_class)
+        holding = Holding.objects.get(pk=self.kwargs['holding_id'])
+        form.instance.holding = holding
+
+        return form
+    
     def get_initial(self):
         # save the user object for use in the Form
-        self.initial.update( {'holding_id' : self.kwargs.get("holding_id", None) })
-        
+#         self.initial.update( {'holding_id' : self.kwargs.get("holding_id", None) })
+        self.initial['type'] = self.type
+         
         return super(TransactionCreate,self).get_initial()
 
+#     def form_valid(self,form):
+#         self.instance.holding = Holding.objects.get(pk=self.kwargs['holding_id'])
+#         
+#         pass
 
 
 class PriceView(TemplateView):

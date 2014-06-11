@@ -35,9 +35,14 @@ urlpatterns = patterns('',
              
     
     # Transaction URL's
-    url(r'^transaction/(?P<holding_id>\d+)/$',
-        login_required(TransactionCreate.as_view() ),
-        name = "transaction"),
+    url(r'^transaction/(?P<holding_id>\d+)/buy/$',
+        login_required(TransactionCreate.as_view(type="Buy") ),
+        name = "transaction_buy"),
+                       
+    url(r'^transaction/(?P<holding_id>\d+)/sell/$',
+        login_required(TransactionCreate.as_view(type="Sell") ),
+        name = "transaction_sell"),
+
                        
     url(r'price/(?P<holding_id>\d+)/$', PriceView.as_view() ),
     
