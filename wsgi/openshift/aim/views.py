@@ -4,6 +4,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import TemplateView
 from django.shortcuts import get_object_or_404
+from django.core.urlresolvers import reverse
 
 from aim.forms import PortfolioForm, ControlForm, HoldingForm, TransactionForm
 
@@ -135,27 +136,31 @@ class TransactionCreate(CreateView):
 
     type = None
 
-    def get_queryset(self):
-        return Transaction.objects.filter(holding__portfolio__owner = self.request.user)
+#     def get_queryset(self):
+#         return Transaction.objects.filter(holding__portfolio__owner = self.request.user)
 
     def get_form(self, form_class):
         form = super(TransactionCreate, self).get_form(form_class)
         holding = Holding.objects.get(pk=self.kwargs['holding_id'])
+
+        if holding.portfolio.owner != self.request.user:
+            raise
+
         form.instance.holding = holding
 
         return form
-    
+
+    def form_valid(self, form):
+        form = super(TransactionCreate,self).form_valid(form)
+
+        return form
+
     def get_initial(self):
-        # save the user object for use in the Form
-#         self.initial.update( {'holding_id' : self.kwargs.get("holding_id", None) })
+        # we get the type of transaction from the URLconf as a named parameter.
         self.initial['type'] = self.type
-         
+        
         return super(TransactionCreate,self).get_initial()
 
-#     def form_valid(self,form):
-#         self.instance.holding = Holding.objects.get(pk=self.kwargs['holding_id'])
-#         
-#         pass
 
 
 class PriceView(TemplateView):

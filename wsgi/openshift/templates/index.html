@@ -1,34 +1,8 @@
-{% extends "bootstrap.html" %}
+{% extends "base.html" %}
 
 {% block title %} Index page for AIM {% endblock %}
 
-{% block bootstrap-nav %}
-    <a class="brand">RetireOnAIM</a>
-
-    <!-- User or login on toolbar? -->
-    {% if user.is_authenticated %}
-        <form action="/accounts/logout/" class="pull-right">
-            {% csrf_token %}
-            Hello {{ user.username}}
-            <input type="hidden" name="next" value="/" />
-            <button class="btn" type="submit">Logout</button>
-        </form>
-    {% else %}
-        <p class="pull-right">
-        <form method="post" action="/accounts/login/" class="pull-right">
-            {% csrf_token %}
-            <input class="input-small" type="text" name="username">
-            <input class="input-small" type="password" name="password">
-            <input type="hidden" name="next" value="/" />
-            <button class="btn" type="submit">Login</button>
-        </form>
-        </p>
-    {% endif %}
-{% endblock %}
-
-{% block body %}
-
-    <div  class="container">
+{% block bodystart %}
 
     {% if not user.is_authenticated %}
         <div class="hero-unit">

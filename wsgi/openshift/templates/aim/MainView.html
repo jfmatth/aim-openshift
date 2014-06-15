@@ -35,8 +35,8 @@
 			        <td> {{ h.currentalert.buyprice }} </td>
 			        <td> {{ h.symbol.currentprice.close }}</td>
 			        <td> {{ h.currentalert.sellprice }}</td>
-			        <td> <a href="{% url "transaction_buy" h.id %}" type="button" class="btn btn-success" >Buy </a> 
-			        	 <a href="{% url "transaction_sell" h.id %}" type="button" class="btn btn-danger" >Sell </a>
+			        <td> <a href="{% url 'transaction_buy' h.id %}" type="button" class="btn btn-success" >Buy </a> 
+			        	 <a href="{% url 'transaction_sell' h.id %}" type="button" class="btn btn-danger" >Sell </a>
 			        </td>
 			    </tr>
 				{% endfor %}

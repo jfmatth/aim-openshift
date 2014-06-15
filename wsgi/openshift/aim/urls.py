@@ -32,8 +32,8 @@ urlpatterns = patterns('',
     url(r'^holding/(?P<pk>\d+)/$',
         login_required(HoldingUpdateView.as_view()),
         name = "holding_view"),
-             
-    
+
+
     # Transaction URL's
     url(r'^transaction/(?P<holding_id>\d+)/buy/$',
         login_required(TransactionCreate.as_view(type="Buy") ),
