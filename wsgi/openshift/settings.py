@@ -140,8 +140,6 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    "c:/Users/jmatthew/Development/bootstrap.v300",
-    "c:/Users/jmatthew/Development/jquery",
     os.path.join(PROJECT_DIR,"static"),
 )
 
@@ -226,4 +224,4 @@ EMAIL_HOST_PASSWORD = 'Pa55word'
 
 # registration settings
 REGISTRATION_OPEN = True
-ACCOUNT_ACTIVATION_DAYS = 20
+ACCOUNT_ACTIVATION_DAYS = 2

@@ -11,7 +11,7 @@ from aim.views import HoldingUpdateView, PriceView
 urlpatterns = patterns('',
     url(r'^$',
         login_required(MainView.as_view() ),
-        name = "main"
+        name = "aim_main"
     ),
 
     # Portfolio URL's

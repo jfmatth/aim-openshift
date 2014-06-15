@@ -46,9 +46,9 @@
 		<div class="panel-footer"><a href="{% url "holding_add" p.id %} ">Add Holding </a></div>
 
     </div>	<!-- panel -->
-    
-    
         
     {% endfor %}
-   
+	
+	<a href="{% url 'index' %}" type="button" class="btn btn-primary">Home</a>
+
 {% endblock %}
