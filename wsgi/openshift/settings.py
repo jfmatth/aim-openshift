@@ -225,3 +225,7 @@ EMAIL_HOST_PASSWORD = 'Pa55word'
 # registration settings
 REGISTRATION_OPEN = True
 ACCOUNT_ACTIVATION_DAYS = 2
+
+
+# browser settings
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
