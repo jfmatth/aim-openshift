@@ -2,7 +2,7 @@
 
 {% block body %}
 	<!-- MainView.html -->
-	<h1>Portfolio List</h1>    
+	<h1>Portfolio List</h1>
 	{% if user.is_authenticated %}
 	    <p>    <a href="{% url "portfolio_add" %}"> Add a Portfolio </a>
 	{% endif %}
@@ -49,6 +49,5 @@
         
     {% endfor %}
 	
-	<a href="{% url 'index' %}" type="button" class="btn btn-primary">Home</a>
 
 {% endblock %}

@@ -229,3 +229,11 @@ ACCOUNT_ACTIVATION_DAYS = 2
 
 # browser settings
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# caching.
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake'
+    }
+}
