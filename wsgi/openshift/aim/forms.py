@@ -46,6 +46,12 @@ class HoldingForm(forms.ModelForm):
     # define symbol here to override the default ModelChoicefield dropdown list.
     symbol = forms.CharField()
 
+#     def __init__(self, *args, **kwargs):
+#         super(HoldingForm, self).__init__(*args, **kwargs)
+#         
+#         self.fields['portfolio'].required = False
+#         self.fields['portfolio'].widget.attrs['disabled'] = True 
+
     def clean_symbol(self):
         # Since symbol needs to be a symbol object, use the clean
         # method to make sure it's valid, and if it is, return a symbol object, not the text.
@@ -56,7 +62,7 @@ class HoldingForm(forms.ModelForm):
 
     class Meta:
         model = Holding
-        fields = ('symbol', 'reason', 'portfolio' )
+        fields = ('symbol', 'reason' )
 
 
 

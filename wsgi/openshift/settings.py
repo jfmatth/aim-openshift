@@ -120,13 +120,11 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -227,7 +225,6 @@ EMAIL_HOST_PASSWORD = 'Pa55word'
 # registration settings
 REGISTRATION_OPEN = True
 ACCOUNT_ACTIVATION_DAYS = 2
-
 
 # browser settings
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True

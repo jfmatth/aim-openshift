@@ -5,6 +5,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import TemplateView
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist
 
 from aim.forms import PortfolioForm, ControlForm, HoldingForm, TransactionForm
 
@@ -60,16 +61,23 @@ class HoldingCreateView(CreateView):
     model = Holding
     form_class = HoldingForm
     success_url = "/aim/"
-
     template_name = "aim/HoldingView.html"
+
+    portfolio = None
 
     def get_form(self, form_class):
         form = super(HoldingCreateView, self).get_form(form_class)
-       
-        # setup the available portfolios and the inital value if any for this holding
-        form.fields['portfolio'].queryset = Portfolio.objects.filter(owner=self.request.user)
-        form.fields['portfolio'].initial = self.kwargs.get("portid", None)
         
+        portfolio = Portfolio.objects.get(pk=self.kwargs['portid'])
+        if portfolio.owner != self.request.user:
+            raise ObjectDoesNotExist
+        
+        form.instance.portfolio = portfolio 
+       
+#         # setup the available portfolios and the inital value if any for this holding
+#         form.fields['portfolio'].queryset = Portfolio.objects.filter(owner=self.request.user)
+#         form.fields['portfolio'].initial = self.kwargs.get("portid", None)
+#         
         return form
     
     
@@ -79,6 +87,7 @@ class HoldingUpdateView(UpdateView):
     model = Holding
     success_url = "/aim/"
     
+        
     def get_initial(self):
         # setup the symbol, otherwise it will show the FK id instead.
         initial = super(HoldingUpdateView, self).get_initial()

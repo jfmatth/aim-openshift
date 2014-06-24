@@ -282,7 +282,6 @@ class AimController(AimBase):
         if not from_trans and not self.id==None:
             # if we are editing the controller settings, we should make a new alert, 
             # and set the date to today.
-            print "Controller.save.addHoldingAlert"  
             HoldingAlert(holding=self.holding, date=datetime.datetime.today() ).save()
 
         super(AimController, self).save(force_insert, force_update)

@@ -108,7 +108,7 @@
 	{% endif %}
 
 	<div class="panel panel-primary">
-		<div class="panel-heading">Graph - Current Price = {{object.symbol.currentprice.close}} </div>
+		<div class="panel-heading">Graph<span class="pull-right">Current Price = {{object.symbol.currentprice.close}} </span></div>
 		<div class="panel-body" id="graph">
 		</div>
 	</div>
@@ -131,11 +131,14 @@
 			        </div>
 			    {% endfor %}
 			    
-			    <!-- general fields here, not editable -->
-				<label>Shares:</label> {{ object.shares }}
-				<label>Value:</label> {{ object.value }}
-				<label>Cost:</label> {{ object.cost }}
-				<label>Profit:</label> {{object.profit}}
+			    {% if object.id %}
+				    <!-- general fields here, not editable -->
+					<label>Shares:</label> {{ object.shares }}
+					<label>Value:</label> {{ object.value }}
+					<label>Cost:</label> {{ object.cost }}
+					<label>Profit:</label> {{object.profit}}
+				{% endif %}
+				
 			</div> <!-- panel-body -->
 			<div class="panel-footer">
 				  <input type="submit" name="_holding" class="btn btn-primary pull-right"></button>
