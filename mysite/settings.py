@@ -47,6 +47,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'aim',
+    'registration',
+    'loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -109,3 +112,81 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 
 )
+STATICFILES_DIRS = (
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(BASE_DIR,"static"),
+)
+
+TEMPLATE_DIRS = (
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(BASE_DIR, 'templates'),
+)
+
+
+
+
+if ON_PAAS:
+    logdir = os.environ['OPENSHIFT_PYTHON_LOG_DIR']
+else:
+    logdir = BASE_DIR
+    
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'logfile': {
+            'level':'INFO',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': logdir + "/application.log",
+            'maxBytes': 50000,
+            'backupCount': 2,
+        },
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'handlers': ['console', 'logfile'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'loader': {
+            'handlers': ['logfile'],
+            'level': 'DEBUG',
+        },
+        'aim': {
+            'handlers': ['console', 'logfile'],
+            'level': 'DEBUG',
+        },
+
+    }
+}
+
+# EMAIL settings
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'registration@compunique.com'
+EMAIL_HOST_PASSWORD = 'Pa55word'
+
+# registration settings
+REGISTRATION_OPEN = True
+ACCOUNT_ACTIVATION_DAYS = 2
+
+# browser settings
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True

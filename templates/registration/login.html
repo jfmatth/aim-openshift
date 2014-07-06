@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+{% comment %}
+
+	<!-- Old original code from django-registration -->
+ 
+	<form method="post" action=".">
+	  {% csrf_token %} 
+	  {{ form.as_p }}
+	
+	  <input type="submit" value="{% trans 'Log in' %}" />
+	  <input type="hidden" name="next" value="{{ next }}" />
+	</form>
+	
+	<p>{% trans "Forgot password" %}? <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>!</p>
+	<p>{% trans "Not member" %}? <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>!</p>
+{% endcomment %}
+
+
+{% comment %}
+  below bootstrap snippet taken from http://bootsnipp.com/snippets/featured/login-in-a-panel
+{% endcomment %}
+
+<div class="col-md-4 col-md-offset-4">
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3 class="panel-title"><strong>Sign in / <a href="{% url 'registration_register' %}">{% trans "Register" %}</a></strong></h3></div>
+		
+		<div class="panel-body">
+			<form role="form" method="post" action=".">  {% csrf_token %} 
+				<div class="form-group">
+					<label for="id_username">Username</label>
+					<input name="username" class="form-control" style="border-radius:0px" id="id_username" placeholder="Enter email">
+				</div>
+				<div class="form-group">
+					<label for="id_password">Password</label>
+					<input type="password" name="password" class="form-control" style="border-radius:0px" id="id_password" placeholder="Password">
+					{% trans "Forgot password" %}? <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>
+				</div>
+				<button type="submit" class="btn btn-sm btn-default">{% trans 'Log in' %}</button>
+				<input type="hidden" name="next" value="{{ next }}" />
+			</form>
+		</div>			 <!-- panel-body -->
+	</div>			<!-- panel -->
+</div>			<!-- col-md4... -->
+
+{% endblock %}

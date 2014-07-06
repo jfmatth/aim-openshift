@@ -1,2 +1,14 @@
+activate*
+README
+admin.txt
+EODDATA
+*.py[co]
+*.sw[po]
+*.bak
+*.orig
+*~
+.project
+.pydevproject
+.settings
 db.sqlite3
-*.pyc
+*.log
