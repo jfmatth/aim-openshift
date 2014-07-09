@@ -39,11 +39,8 @@ TEMPLATE_DEBUG = True
 if ON_PAAS:
     ALLOWED_HOSTS = [os.environ['OPENSHIFT_APP_DNS'], socket.gethostname()]
 else:
-    ALLWED_HOSTS = []
+    ALLOWED_HOSTS = []
     
-#ALLOWED_HOSTS = ['*']
-
-
 # Application definition
 
 INSTALLED_APPS = (
@@ -201,5 +198,8 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # django toolbar for WSGI
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
-SHOW_TOOLBAR_CALLBACK=True 
-INTERNAL_IPS = ('127.0.0.1',)
+
+def returntrue(request):
+    return DEBUG
+
+DEBUG_TOOLBAR_CONFIG = {'SHOW_TOOLBAR_CALLBACK': 'mysite.settings.returntrue'}
