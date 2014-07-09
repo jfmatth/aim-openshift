@@ -36,7 +36,11 @@ if ON_PAAS and DEBUG:
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = [os.environ['OPENSHIFT_APP_DNS'], socket.gethostname()]
+if ON_PAAS:
+    ALLOWED_HOSTS = [os.environ['OPENSHIFT_APP_DNS'], socket.gethostname()]
+else:
+    ALLWED_HOSTS = []
+    
 #ALLOWED_HOSTS = ['*']
 
 
@@ -53,6 +57,9 @@ INSTALLED_APPS = (
     'registration',
     'loader',
 )
+
+if DEBUG:
+    INSTALLED_APPS += ('debug_toolbar',)
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
