@@ -56,10 +56,8 @@ INSTALLED_APPS = (
     'aim',
     'registration',
     'loader',
+    'debug_toolbar',
 )
-
-if DEBUG:
-    INSTALLED_APPS += ('debug_toolbar',)
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
