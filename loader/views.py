@@ -17,7 +17,7 @@ from loader.forms import LoaderForm
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-
+@transaction.atomic
 def ImportPrices(f):
     """
     Import a file f into the prices table.
@@ -47,7 +47,7 @@ def ImportPrices(f):
             # this is the date we are checking, so load all symbols from price for 
             # this date and use it for quick checking.
             datecheck = d
-            print "Loading / Checking date %s" % datecheck
+            logger.info("Loading / Checking date %s" % datecheck)
             symbollist = set(Price.objects.filter(date=d).values_list("symbol__name", flat=True))
 
         # now use the symbollist to verify each CSV line w/o a lookup
@@ -73,13 +73,15 @@ def ImportPrices(f):
                 p.volume = csvline[6]
                 p.save()
                 
+                logger.info("Saved price %s" % p)
+                
                 # check if this price upload is 'newer' than the symbols current price
                 if sym.currentprice == None or p.date > sym.currentprice.date:
                     sym.currentprice = p
                     sym.save()
     
             except ObjectDoesNotExist:
-                print "Problem with %s" % csvline
+                logger.error("Problem with %s" % csvline)
                 # add this to the price error if necessary
                 p, c = PriceError.objects.get_or_create(symbolname = csvline[0] )
 
@@ -99,7 +101,7 @@ def LoadPrices(request):
     return HttpResponse("Loaded %s Prices" % count)
 
 
-
+@transaction.atomic
 def ImportExchange(f):
     dialect = csv.Sniffer().sniff( f.read(1024) )
     f.seek(0)
