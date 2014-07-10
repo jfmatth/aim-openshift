@@ -137,21 +137,30 @@ if ON_PAAS:
     logdir = os.environ['OPENSHIFT_PYTHON_LOG_DIR']
 else:
     logdir = BASE_DIR
-    
+
+LOGLEVEL=os.environ.get('LOGLEVEL', 'ERROR')
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+    },
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler'
         },
         'logfile': {
-            'level':'INFO',
+            'level':LOGLEVEL,
             'class':'logging.handlers.RotatingFileHandler',
             'filename': logdir + "/application.log",
             'maxBytes': 50000,
             'backupCount': 2,
+            'formatter' : 'standard',
         },
         'console':{
             'level':'DEBUG',
