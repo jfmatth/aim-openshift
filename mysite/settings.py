@@ -17,7 +17,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # openshift is our PAAS for now.
 ON_PAAS = 'OPENSHIFT_REPO_DIR' in os.environ
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -199,7 +198,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # django toolbar for WSGI
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
-def returntrue(request):
+def returnDEBUG(request):
     return DEBUG
 
-DEBUG_TOOLBAR_CONFIG = {'SHOW_TOOLBAR_CALLBACK': 'mysite.settings.returntrue'}
+DEBUG_TOOLBAR_CONFIG = {'SHOW_TOOLBAR_CALLBACK': 'mysite.settings.returnDEBUG'}

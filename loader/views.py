@@ -17,7 +17,7 @@ from loader.forms import LoaderForm
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-@transaction.atomic
+
 def ImportPrices(f):
     """
     Import a file f into the prices table.
@@ -100,7 +100,6 @@ def LoadPrices(request):
 
 
 
-@transaction.atomic
 def ImportExchange(f):
     dialect = csv.Sniffer().sniff( f.read(1024) )
     f.seek(0)
