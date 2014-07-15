@@ -33,7 +33,7 @@ DEBUG = DEBUG or 'DEBUG' in os.environ
 if ON_PAAS and DEBUG:
     print "*** Warning - Debug mode is on ***"
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = False or 'DEBUG_TEMPLATE' in os.environ
 
 if ON_PAAS:
     ALLOWED_HOSTS = [os.environ['OPENSHIFT_APP_DNS'], socket.gethostname()]
@@ -156,10 +156,8 @@ LOGGING = {
         },
         'logfile': {
             'level':LOGLEVEL,
-            'class':'logging.handlers.RotatingFileHandler',
+            'class':'logging.FileHandler',
             'filename': logdir + "/application.log",
-            'maxBytes': 50000,
-            'backupCount': 2,
             'formatter' : 'standard',
         },
         'console':{
@@ -208,6 +206,6 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
 def returnDEBUG(request):
-    return DEBUG
+    return TEMPLATE_DEBUG
 
 DEBUG_TOOLBAR_CONFIG = {'SHOW_TOOLBAR_CALLBACK': 'mysite.settings.returnDEBUG'}
