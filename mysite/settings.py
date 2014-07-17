@@ -13,9 +13,10 @@ import os
 import socket
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
 # openshift is our PAAS for now.
 ON_PAAS = 'OPENSHIFT_REPO_DIR' in os.environ
+
+WWWNAME = ['www.stocksonthebeach.com','stocksonthebeach.com']
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -36,7 +37,7 @@ if ON_PAAS and DEBUG:
 TEMPLATE_DEBUG = False or 'DEBUG_TEMPLATE' in os.environ
 
 if ON_PAAS:
-    ALLOWED_HOSTS = [os.environ['OPENSHIFT_APP_DNS'], socket.gethostname()]
+    ALLOWED_HOSTS = [os.environ['OPENSHIFT_APP_DNS'], socket.gethostname()] + WWWNAME
 else:
     ALLOWED_HOSTS = []
     
