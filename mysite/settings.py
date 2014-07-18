@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'aim',
     'registration',
     'loader',
@@ -210,3 +211,6 @@ def returnDEBUG(request):
     return TEMPLATE_DEBUG
 
 DEBUG_TOOLBAR_CONFIG = {'SHOW_TOOLBAR_CALLBACK': 'mysite.settings.returnDEBUG'}
+
+# sites framework
+SITE_ID = 1
