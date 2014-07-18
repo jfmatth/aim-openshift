@@ -29,7 +29,7 @@ curl -3 -F formdata=@AMEX_prices.csv $OPENSHIFT_APP_DNS/loader/raw/prices/AMEX
 curl -3 -F formdata=@NASDAQ_prices.csv $OPENSHIFT_APP_DNS/loader/raw/prices/NASDAQ
 curl -3 -F formdata=@NYSE_prices.csv $OPENSHIFT_APP_DNS/loader/raw/prices/NYSE
 
-curl $OPENSHIFT_APP_DNS/loader
+curl -3 https://$OPENSHIFT_APP_DNS/loader/
 
 rm cookiejar.txt
 rm datafile.html
