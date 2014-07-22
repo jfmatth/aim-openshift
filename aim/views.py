@@ -22,7 +22,7 @@ class MainView(ListView):
     context_object_name = "object_list"
 
     def get_queryset(self):
-        return Portfolio.objects.filter(owner=self.request.user)
+        return Portfolio.objects.filter(owner=self.request.user).order_by("name")
 
 
 
