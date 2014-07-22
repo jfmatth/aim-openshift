@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response
 
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import TemplateView
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
@@ -22,7 +22,7 @@ class MainView(ListView):
     context_object_name = "object_list"
 
     def get_queryset(self):
-        return Portfolio.objects.filter(owner=self.request.user)
+        return Portfolio.objects.filter(owner=self.request.user).order_by("name")
 
 
 
@@ -135,6 +135,18 @@ class HoldingUpdateView(UpdateView):
                 return super(HoldingUpdateView,self).get_form_class()
 
 
+
+class HoldingDeleteView(DeleteView):
+    model = Holding
+    template_name = "aim/HoldingDelete.html"
+    success_url = "/aim/"
+    
+    def get_queryset(self):
+        return Holding.objects.filter(portfolio__owner=self.request.user)
+
+
+
+
 #===============================================================================
 # Transaction
 #===============================================================================
@@ -171,6 +183,14 @@ class TransactionCreate(CreateView):
         return super(TransactionCreate,self).get_initial()
 
 
+
+class TransactionDeleteView(DeleteView):
+    model = Transaction
+    template_name = "aim/TransactionDelete.html"
+    success_url = "/aim/"
+    
+    def get_queryset(self):
+        return Transaction.objects.filter(holding__portfolio__owner=self.request.user)
 
 class PriceView(TemplateView):
     template_name = "chartview.html"

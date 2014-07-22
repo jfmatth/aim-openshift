@@ -5,7 +5,8 @@ from django.conf.urls import patterns, include, url
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 
-from aim.views import MainView, PortfolioUpdate, PortfolioCreate, HoldingCreateView, TransactionCreate
+from aim.views import MainView, PortfolioUpdate, PortfolioCreate, HoldingCreateView
+from aim.views import TransactionCreate, TransactionDeleteView, HoldingDeleteView
 from aim.views import HoldingUpdateView, PriceView 
 
 urlpatterns = patterns('',
@@ -32,7 +33,9 @@ urlpatterns = patterns('',
     url(r'^holding/(?P<pk>\d+)/$',
         login_required(HoldingUpdateView.as_view()),
         name = "holding_view"),
-
+    url(r'^holding/delete/(?P<pk>\d+)/$',
+        login_required(HoldingDeleteView.as_view()),
+        name = "holding_delete"),
 
     # Transaction URL's
     url(r'^transaction/(?P<holding_id>\d+)/buy/$',
@@ -42,6 +45,10 @@ urlpatterns = patterns('',
     url(r'^transaction/(?P<holding_id>\d+)/sell/$',
         login_required(TransactionCreate.as_view(type="Sell") ),
         name = "transaction_sell"),
+
+    url(r'^transaction/delete/(?P<pk>\d+)/$',
+        login_required(TransactionDeleteView.as_view()),
+        name="transaction_delete"),
 
                        
     url(r'price/(?P<holding_id>\d+)/$', PriceView.as_view() ),
