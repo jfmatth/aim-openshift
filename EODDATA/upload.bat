@@ -35,7 +35,7 @@
 	
 	set /A x+=1
 	if %x%==3 (
-		curl -3 %URLPATH%/
+		curl -m 360 -3 %URLPATH%/
 		echo %errorlevel%
 		set x=1
 	)

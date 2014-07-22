@@ -324,6 +324,11 @@ class Transaction(models.Model):
     def jsdate(self):
         return int( (datetime.datetime.fromordinal(self.date.toordinal() )-datetime.datetime(1970,1,1)).total_seconds() * 1000 )
 
+    def delete(self):
+        x = super(Transaction, self).delete()
+        print "Delete() ran"
+        return x
+
     def save(self, force_insert=False, force_update=False):
         super(Transaction, self).save(force_insert, force_update)
         
