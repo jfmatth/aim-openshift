@@ -9,9 +9,9 @@
 	:: load all exchanges.
 	FOR %%a IN (*.txt) DO CALL :exchange %%a
 	
-	:: load symbols and prices 
-	curl -3 %URLPATH%/
-	echo %errorlevel%
+	REM :: load symbols and prices 
+	REM curl -3 %URLPATH%/
+	REM echo %errorlevel%
 	
 	GOTO :end
 
@@ -33,12 +33,12 @@
 	curl -3 -F formdata=@%2 %URLPATH%/raw/prices/%1
 	echo %errorlevel%
 	
-	set /A x+=1
-	if %x%==3 (
-		curl -3 %URLPATH%/
-		echo %errorlevel%
-		set x=1
-	)
+	REM set /A x+=1
+	REM if %x%==3 (
+		REM curl -m 360 -3 %URLPATH%/
+		REM echo %errorlevel%
+		REM set x=1
+	REM )
 	
 	:: archive
 	MOVE %2 archive\%2
