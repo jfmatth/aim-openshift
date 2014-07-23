@@ -230,7 +230,7 @@ class AimController(AimBase):
         #
         amount = self.control - (self.holding.value() + (self.buysafe / Decimal(100) * self.holding.value()) )
         if amount > 0:
-            return amount
+            return abs(amount)
         else:
             return 0            
                     
@@ -256,7 +256,7 @@ class AimController(AimBase):
         #
         amount = self.control + (self.sellsafe / Decimal(100) * self.holding.value() ) - self.holding.value()
         if amount < 0 :
-            return amount
+            return abs(amount)
         else:
             return 0
 
