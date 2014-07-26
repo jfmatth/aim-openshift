@@ -25,9 +25,9 @@ curl -A "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:27.0) Gecko/20100101 Firefox
 curl -A "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:27.0) Gecko/20100101 Firefox/27.0" -b cookiejar.txt -c cookiejar.txt -L $URLn -o NYSE_prices.csv
 curl -A "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:27.0) Gecko/20100101 Firefox/27.0" -b cookiejar.txt -c cookiejar.txt -L $URLq -o NASDAQ_prices.csv
 
-curl -3 -F formdata=@AMEX_prices.csv $OPENSHIFT_APP_DNS/loader/raw/prices/AMEX
-curl -3 -F formdata=@NASDAQ_prices.csv $OPENSHIFT_APP_DNS/loader/raw/prices/NASDAQ
-curl -3 -F formdata=@NYSE_prices.csv $OPENSHIFT_APP_DNS/loader/raw/prices/NYSE
+curl -3 -F formdata=@AMEX_prices.csv https://$OPENSHIFT_APP_DNS/loader/raw/prices/AMEX
+curl -3 -F formdata=@NASDAQ_prices.csv https://$OPENSHIFT_APP_DNS/loader/raw/prices/NASDAQ
+curl -3 -F formdata=@NYSE_prices.csv https://$OPENSHIFT_APP_DNS/loader/raw/prices/NYSE
 
 curl -3 https://$OPENSHIFT_APP_DNS/loader/
 

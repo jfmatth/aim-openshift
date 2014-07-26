@@ -101,9 +101,9 @@
 {% if object.id %} 					<!-- Only show if we are editing a record -->
 	{% if object.alert %}
 		{% if object.symbol.currentprice.close < object.currentalert.buyprice %}
-			<div class="alert alert-success">BUY ALERT</div>
+			<div class="alert alert-success">BUY ALERT ${{object.controller.BuyAmount}}</div>
 		{% else %}
-			<div class="alert alert-danger">SELL ALERT</div>
+			<div class="alert alert-danger">SELL ALERT ${{object.controller.SellAmount}}</div>
 		{% endif %}
 	{% endif %}
 
