@@ -1,53 +1,67 @@
 {% extends "base.html" %}
 
-{% block body %}
+{% block bodystart %}
 	<!-- MainView.html -->
-	<h1>Portfolio List</h1>
+	<h1 class="page-header">My Portfolio's</h1>
+    {% for p in object_list %}
+   	<h3>
+   		<a href="{% url "portfolio_edit" p.id %}"> {{p|capfirst}} </a>
+   		<a class="pull-right" href="{% url "holding_add" p.id %} ">+</a>
+   	</h3>
+
+	{% if p.holding_set.all %}
+	<table class="table">
+		<thead>
+	        <tr>
+	            <th>Holding</th>
+	            <th>Shares</th>
+	            <th>Value</th>
+	            <th>Buy</th>
+	            <th>Current</th>
+	            <th>Sell</th>
+	            <th></th>
+	            <th></th>
+	        </tr>
+		</thead>
+		
+		<tbody>
+		    {% for h in p.holding_set.all %}
+		    <tr>
+		        <td><a href="{% url "holding_view" h.id %}" >{{ h.symbol }}</a></td>
+		        <td>{{ h.shares | floatformat:3}}</td>
+		        <td>{{ h.value | floatformat:2}}</td>
+		        
+			{% if h.shares and h.symbol.currentprice.close < h.currentalert.buyprice %}
+		        <td class="success">
+		        <a href="{% url 'transaction_buy' h.id %}" >{{ h.currentalert.buyprice | floatformat:3 }}</a>
+		         </td>
+			{% else %}
+				<td>{{ h.currentalert.buyprice | floatformat:3}} </td>
+			{% endif %}
+		        <td>{{ h.symbol.currentprice.close | floatformat:3}}</td>
+
+			{% if h.shares and h.symbol.currentprice.close > h.currentalert.sellprice %}
+		        <td class="danger">
+		        <a href="{% url 'transaction_sell' h.id %}">{{ h.currentalert.sellprice | floatformat:3}}</a>
+		        </td>
+		    {% else %}
+		    	<td >{{ h.currentalert.sellprice | floatformat:3}}</td>
+		    {% endif %}
+		    
+		    	<td></td>
+		        <td><a href="{% url 'transaction_buy' h.id %}" type="button" class="btn btn-success btn-xs" >+</a> 
+		        	<a href="{% url 'transaction_sell' h.id %}" type="button" class="btn btn-danger btn-xs" >-</a>
+		        </td>
+		    </tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{% endif %}
+
+    {% endfor %}
 	{% if user.is_authenticated %}
 	    <p>    <a href="{% url "portfolio_add" %}"> Add a Portfolio </a>
 	{% endif %}
-	
-    {% for p in object_list %}
-	<div class="panel panel-default">
-  		<div class="panel-heading">
-  			<h3 class="panel-title"><a href="{% url "portfolio_edit" p.id %}"> {{p}} </a></h3>
-  		</div>
-		<div class="panel-body">
-			{% if p.holding_set.all %}
-	        <table class="table">
-		        <tr>
-		            <th>Holding</th>
-		            <th>Shares</th>
-		            <th>Value</th>
-		            <th>Alert</th>
-		            <th>Next Buy</th>
-		            <th>Current Price</th>
-		            <th>Next Sell</th>
-		            <th>Transaction</th>
-		        </tr>
-	    
-			    {% for h in p.holding_set.all %}
-			    <tr>
-			        <td><a href="{% url "holding_view" h.id %}" >{{ h.symbol }}</a></td>
-			        <td>{{ h.shares }}</td>
-			        <td>{{ h.value }}</td>
-			        <td>{{ h.alert }}</td>
-			        <td> {{ h.currentalert.buyprice }} </td>
-			        <td> {{ h.symbol.currentprice.close }}</td>
-			        <td> {{ h.currentalert.sellprice }}</td>
-			        <td> <a href="{% url 'transaction_buy' h.id %}" type="button" class="btn btn-success" >Buy </a> 
-			        	 <a href="{% url 'transaction_sell' h.id %}" type="button" class="btn btn-danger" >Sell </a>
-			        </td>
-			    </tr>
-				{% endfor %}
-	    	</table>
-		    {% endif %}
-		</div> <!-- panel-body -->
-		<div class="panel-footer"><a href="{% url "holding_add" p.id %} ">Add Holding </a></div>
-
-    </div>	<!-- panel -->
-        
-    {% endfor %}
 	
 
 {% endblock %}
