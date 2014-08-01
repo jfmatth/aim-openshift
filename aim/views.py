@@ -1,15 +1,25 @@
-from django.shortcuts import render_to_response
-
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.generic import TemplateView
-from django.shortcuts import get_object_or_404
-from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 
 from aim.forms import PortfolioForm, ControlForm, HoldingForm, TransactionForm
+from aim.models import Portfolio, Holding, Transaction, HoldingAlert
 
-from aim.models import Portfolio, Holding, Symbol, Transaction, AimController
+#===============================================================================
+# Index page /
+#===============================================================================
+class IndexView(TemplateView):
+    template_name = "index.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        
+        context['portfolios'] = Portfolio.objects.all().count()
+        context['holdings']   = Holding.objects.all().count()
+        context['alerts']     = HoldingAlert.objects.all().count()
+
+        return context
+
 
 #===============================================================================
 # MainView for /aim
