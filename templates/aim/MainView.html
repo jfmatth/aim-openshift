@@ -2,15 +2,17 @@
 
 {% block bodystart %}
 	<!-- MainView.html -->
-	<h1 class="page-header">My Portfolio's</h1>
+	<h1 class="page-header">My Portfolios</h1>
     {% for p in object_list %}
    	<h3>
    		<a href="{% url "portfolio_edit" p.id %}"> {{p|capfirst}} </a>
-   		<a class="pull-right" href="{% url "holding_add" p.id %} ">+</a>
+   		<a type="button" class="pull-right btn btn-danger btn-xs" title="Delete portfolio" href="{% url "portfolio_delete" p.id %}">D</a>
+   		&nbsp
+   		<a type="button" class="pull-right btn btn-success btn-xs" title="Add Holding" href="{% url "holding_add" p.id %}">+</a>
    	</h3>
 
 	{% if p.holding_set.all %}
-	<table class="table">
+	<table class="table table-bordered">
 		<thead>
 	        <tr>
 	            <th>Holding</th>
@@ -21,6 +23,8 @@
 	            <th>Sell</th>
 	            <th></th>
 	            <th></th>
+	            <th>Actions</th>
+	            
 	        </tr>
 		</thead>
 		
@@ -49,9 +53,8 @@
 		    {% endif %}
 		    
 		    	<td></td>
-		        <td><a href="{% url 'transaction_buy' h.id %}" type="button" class="btn btn-success btn-xs" >+</a> 
-		        	<a href="{% url 'transaction_sell' h.id %}" type="button" class="btn btn-danger btn-xs" >-</a>
-		        </td>
+		        <td></td>
+		        <td></td>
 		    </tr>
 			{% endfor %}
 		</tbody>

@@ -63,6 +63,14 @@ class PortfolioCreate(CreateView):
         return form
 
 
+class PortfolioDelete(DeleteView):
+    model = Portfolio
+    template_name = "aim/PortfolioDelete.html"
+    success_url = "/aim/"
+    
+    def get_queryset(self):
+        return Portfolio.objects.filter(owner=self.request.user)
+
 
 #===============================================================================
 # Holding
@@ -193,7 +201,6 @@ class TransactionCreate(CreateView):
         return super(TransactionCreate,self).get_initial()
 
 
-
 class TransactionDeleteView(DeleteView):
     model = Transaction
     template_name = "aim/TransactionDelete.html"
@@ -202,8 +209,6 @@ class TransactionDeleteView(DeleteView):
     def get_queryset(self):
         return Transaction.objects.filter(holding__portfolio__owner=self.request.user)
 
-class PriceView(TemplateView):
-    template_name = "chartview.html"
     
     
     

@@ -41,23 +41,29 @@
 
 </div> 
 
-<!-- Statistics -->
-
-<div class="row">
-	<div class="col-md-4">
-		<h2>Portfolios tracked</h2>
-		<h3>{{portfolios}}</h3>
-	</div>
-	<div class="col-md-4">
-		<h2>Holdings managed</h2>
-		<h3>{{holdings}}</h3>
-	</div>
-	<div class="col-md-4">
-		<h2>Advice alerts given</h2>
-		<h3>{{alerts}}</h3>
-	</div>
+<div class="well">
+	<h1><a href="{% url 'registration_register' %}">Sign-up</a> today</h1>
 </div>
-    
+
+<!-- Statistics -->
+<div class="well">
+	<div class="row"> <center>
+	
+		<div class="col-md-4">
+			<h2>Portfolios tracked</h2>
+			<h3>{{portfolios}}</h3>
+		</div>
+		<div class="col-md-4">
+			<h2>Holdings managed</h2>
+			<h3>{{holdings}}</h3>
+		</div>
+		<div class="col-md-4">
+			<h2>Advice alerts given</h2>
+			<h3>{{alerts}}</h3>
+		</div>
+		</center>
+	</div>
+</div>    
 
 {% endblock %}
 
