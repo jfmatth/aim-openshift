@@ -15,7 +15,7 @@ class TradeAlert(models.Model):
                                 )
     
     date = models.DateField()  # when did alert get added
-    description = models.CharField(max_length=50) # free form text 
+    description = models.TextField() 
     emailed = models.BooleanField(default=False)  # was it emailed
 
 

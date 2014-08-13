@@ -42,3 +42,4 @@ def email_alerts():
         send_mail(subj, mess, mfrom, mto, fail_silently=False)
         e.emailed = True
         e.save()
+        
