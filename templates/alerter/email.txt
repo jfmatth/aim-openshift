@@ -1,0 +1,4 @@
+Holding : {{alert.holding.symbol}}
+Current : {{alert.holding.symbol.currentprice}}
+Buy $   : {{alert.holding.controller.BuyAmount}}
+Sell $  : {{alert.holding.controller.SellAmount}}
