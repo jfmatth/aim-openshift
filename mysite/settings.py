@@ -56,6 +56,7 @@ INSTALLED_APPS = (
     'loader',
     'alerter',
     'debug_toolbar',
+    'django.contrib.humanize',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load humanize %}
 
 {% block bodystart %}
 	<!-- MainView.html -->
@@ -31,8 +32,8 @@
 		    {% for h in p.holding_set.all %}
 		    <tr>
 		        <td><a href="{% url "holding_view" h.id %}" >{{ h.symbol }}</a></td>
-		        <td>{{ h.shares | floatformat:3}}</td>
-		        <td>{{ h.value  | floatformat:2}}</td>
+		        <td>{{ h.shares | floatformat:3 | intcomma }}</td>
+		        <td>{{ h.value  | floatformat:2 | intcomma }}</td>
 
 		        <td>{{ h.symbol.currentprice.close | floatformat:3}}</td>
 		        
