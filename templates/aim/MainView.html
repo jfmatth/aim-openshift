@@ -16,15 +16,15 @@
    	</h3>
 
 	{% if p.holding_set.all %}
-	<div class="table-responsive"><table class="table">
+	<div class="table-responsive"><table class="table table-hover">
 		<thead>
 	        <tr>
 	            <th class="col-md-2">Holding</th>
-	            <th class="col-md-2">Shares</th>
-	            <th class="col-md-2">Value</th>
-	            <th class="col-md-1">Current</th>
-	            <th class="col-md-1">Buy</th>
-	            <th class="col-md-1">Sell</th>
+	            <th class="col-md-1 text-right">Shares</th>
+	            <th class="col-md-1 text-right">Value</th>
+	            <th class="col-md-1 text-right">Current</th>
+	            <th class="col-md-1 text-right">Buy</th>
+	            <th class="col-md-1 text-right">Sell</th>
 	        </tr>
 		</thead>
 		
@@ -32,25 +32,26 @@
 		    {% for h in p.holding_set.all %}
 		    <tr>
 		        <td><a href="{% url "holding_view" h.id %}" >{{ h.symbol }}</a></td>
-		        <td>{{ h.shares | floatformat:3 | intcomma }}</td>
-		        <td>{{ h.value  | floatformat:2 | intcomma }}</td>
+		        <td class="text-right">{{ h.shares | floatformat:3 | intcomma }}</td>
+		        <td class="text-right">${{ h.value  | floatformat:2 | intcomma }}</td>
 
-		        <td>{{ h.symbol.currentprice.close | floatformat:3}}</td>
+
+		        <td class="text-right">{{ h.symbol.currentprice.close | floatformat:3}}</td>
 		        
 			{% if h.shares and h.symbol.currentprice.close < h.currentalert.buyprice %}
-		        <td class="success">
+		        <td class="success text-right">
 		        <a href="{% url 'transaction_buy' h.id %}" >{{ h.currentalert.buyprice | floatformat:3 }}</a>
 		         </td>
 			{% else %}
-				<td>{{ h.currentalert.buyprice | floatformat:3}} </td>
+				<td class="text-right">{{ h.currentalert.buyprice | floatformat:3}} </td>
 			{% endif %}
 			
 			{% if h.shares and h.symbol.currentprice.close > h.currentalert.sellprice %}
-		        <td class="danger">
+		        <td class="danger text-right">
 		        <a href="{% url 'transaction_sell' h.id %}">{{ h.currentalert.sellprice | floatformat:3}}</a>
 		        </td>
 		    {% else %}
-		    	<td >{{ h.currentalert.sellprice | floatformat:3}}</td>
+		    	<td class="text-right">{{ h.currentalert.sellprice | floatformat:3}}</td>
 		    {% endif %}
 		    </tr>
 			{% endfor %}
