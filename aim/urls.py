@@ -1,13 +1,12 @@
- # aim.urls.py
- 
-from django.conf.urls import patterns, include, url
-#from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 
-from aim.views import MainView, PortfolioUpdate, PortfolioCreate, HoldingCreateView
-from aim.views import TransactionCreate, TransactionDeleteView, HoldingDeleteView
-from aim.views import HoldingUpdateView, PriceView 
+from aim.views import MainView
+from aim.views import PortfolioUpdate, PortfolioCreate, PortfolioDelete
+from aim.views import HoldingCreateView, HoldingDeleteView, HoldingUpdateView
+from aim.views import TransactionCreate, TransactionDeleteView 
+ 
 
 urlpatterns = patterns('',
     url(r'^$',
@@ -22,6 +21,9 @@ urlpatterns = patterns('',
     url(r'^portfolio/add/$',
         login_required(PortfolioCreate.as_view()),
         name = "portfolio_add" ),
+    url(r'^portfolio/delete/(?P<pk>\d+)/$',
+        login_required(PortfolioDelete.as_view()),
+        name = "portfolio_delete"),
 
     # Holding URL's
     url(r'^holding/add/(?P<portid>\d+)/$',
@@ -51,8 +53,6 @@ urlpatterns = patterns('',
         name="transaction_delete"),
 
                        
-    url(r'price/(?P<holding_id>\d+)/$', PriceView.as_view() ),
-    
     url(r'^graphdata/', TemplateView.as_view(template_name="aim/graphdata.html")),
 
                        

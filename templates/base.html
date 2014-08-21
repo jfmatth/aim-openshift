@@ -1,4 +1,4 @@
-{% load staticfiles %}
+	{% load staticfiles %}
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <!-- base.html -->
@@ -38,9 +38,9 @@
 				</button>
 
 {% if user.is_authenticated %}
-				<a class="navbar-brand" href="{% url 'aim_main' %}">AimInvesting</a></li>
+				<a class="navbar-brand" href="{% url 'aim_main' %}">My Investments</a></li>
 {% else %}
-		     	<a class="navbar-brand" href="/">AimInvesting</a>
+		     	<a class="navbar-brand" href="/">www.StocksontheBeach.com</a>
 {% endif %}
 
 			</div>

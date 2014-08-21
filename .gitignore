@@ -1,7 +1,8 @@
 activate*
 README
 admin.txt
-EODDATA
+EODDATA/archive
+EODDATA/upload.bat
 *.py[co]
 *.sw[po]
 *.bak

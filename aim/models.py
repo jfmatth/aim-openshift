@@ -4,12 +4,6 @@ from django.db import models
 from decimal import Decimal
 
 import datetime
-# from django.core.exceptions import ObjectDoesNotExist
-
-# import datetime
-
-
-# import util.aim_utilities
 
 #===============================================================================
 # Symbol - Stock Symbol
@@ -52,7 +46,7 @@ class Price(models.Model):
 #===============================================================================
 portfolio_perms=(
     ("X", "None - Owner only"),
-    ("V", "View-Only"),
+    ("V", "Public View"),
 )
 class Portfolio(models.Model):
     name  = models.CharField(max_length=50)

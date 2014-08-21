@@ -19,7 +19,7 @@ class Exchange(BaseModel):
     name = models.CharField(max_length=100)
     data = models.TextField(blank=True, null=True)
     
-    loaded = models.BooleanField()
+    loaded = models.BooleanField(default=False)
     
     def __unicode__(self):
         return "%s" % (self.name) 
@@ -28,7 +28,7 @@ class ExchangePrice(BaseModel):
     exchange = models.ForeignKey(Exchange)
     data = models.TextField(blank=True, null=True)
     date = models.DateField(blank=True, null=True)
-    loaded = models.BooleanField()
+    loaded = models.BooleanField(default=False)
     
 class PriceError(BaseModel):
     symbolname = models.CharField(max_length=10, db_index=True, unique=True)
