@@ -171,7 +171,7 @@ class HoldingDeleteView(DeleteView):
 class TransactionCreate(CreateView):
     model = Transaction
     form_class = TransactionForm
-    success_url = "/aim/"
+#     success_url = "/aim/"
 
     type = None
 

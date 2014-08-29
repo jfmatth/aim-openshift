@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
+from django.conf import settings
 
 from aim.views import MainView
 from aim.views import PortfolioUpdate, PortfolioCreate, PortfolioDelete
@@ -52,18 +53,10 @@ urlpatterns = patterns('',
         login_required(TransactionDeleteView.as_view()),
         name="transaction_delete"),
 
-                       
-    url(r'^graphdata/', TemplateView.as_view(template_name="aim/graphdata.html")),
-
-                       
-#     (r'^portfolio/add/$',                          'aim.views.portfolio_add'),
-#     (r'^portfolio/edit/(?P<portfolio_id>\d+)/$',   'aim.views.portfolio_edit'),
-    
-    # Holdings
-#     (r'^holding/all/$',                            'aim.views.holding_all'),
-#     (r'^holding/(?P<holding_id>\d+)/$',            'aim.views.holding'),
-#     (r'^holding/add/$',                            'aim.views.holding_add'),
-#     (r'^holding/edit/(?P<holding_id>\d+)/$',       'aim.views.holding_edit'),
-    
+                         
 )
-    
+
+if settings.DEBUG:                       
+    urlpatterns += patterns('',
+        url(r'^graphdata/', TemplateView.as_view(template_name="aim/graphdata.html")),
+    )    

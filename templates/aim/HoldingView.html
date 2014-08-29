@@ -93,6 +93,7 @@
 			<small> {{object.symbol.description}} </small>
 			in <small>{{object.portfolio}} </small>
 			</h1>
+			<a href="{% url "holding_delete" object.id %}" title="Delete this holding" type="button" class="btn btn-xs btn-danger pull-right" >D</a>
 		{% endif %}
 		
 		<a href="{% url "aim_main" %} ">Main Portfolio List</a>
@@ -114,7 +115,7 @@
 	</div>
 {% endif %}
 
-	<form role="form" action="." method="post" >{% csrf_token %}
+	<form role="form" class="form-inline" action="." method="post" >{% csrf_token %}
 		<div class="panel panel-primary">
 			<div class="panel-heading">
 				General
@@ -131,16 +132,17 @@
 			        </div>
 			    {% endfor %}
 			    
-			    {% if object.id %}
-				    <!-- general fields here, not editable -->
-					<label>Shares:</label> {{ object.shares }}
-					<label>Value:</label> {{ object.value }}
-					<label>Cost:</label> {{ object.cost }}
-					<label>Profit:</label> {{object.profit}}
-				{% endif %}
 				
 			</div> <!-- panel-body -->
 			<div class="panel-footer">
+			
+			    {% if object.id %}
+				    <!-- general fields here, not editable -->
+					<label>Shares:</label> {{ object.shares | floatformat:3}}
+					<label>Value:</label>  ${{ object.value | floatformat:3}}
+					<label>Cost:</label>   ${{ object.cost | floatformat:3}}
+					<label>Profit:</label> ${{object.profit |floatformat:3}}
+				{% endif %}
 				  <input type="submit" name="_holding" class="btn btn-primary pull-right"></button>
 				  <div class="clearfix"></div>
 			</div>
@@ -180,15 +182,15 @@
 			</table>
 			{% endif %}
 			<div class="panel-footer">
-				  <a href="{% url "transaction_buy" object.id %}?next=nextpage{{object.id}}" type="button" class="btn btn-success" >Buy </a>
-				  <a href="{% url "transaction_sell" object.id %}?next=/aim/holding/{{object.id}}" type="button" class="btn btn-danger" >Sell </a>
+				  <a href="{% url "transaction_buy" object.id %}" type="button" class="btn btn-success" >Buy </a>
+				  <a href="{% url "transaction_sell" object.id %}" type="button" class="btn btn-danger" >Sell </a>
 			</div>
 
 		</div>
 	</div>
 
 	<div class="panel panel-primary">
-		<div class="panel-heading">Alerts</div>
+		<div class="panel-heading">Advice</div>
 		<div class="panel-body">
 			{% if object.holdingalert_set.all %}
 			<table class="table">
@@ -231,125 +233,11 @@
 			</div>
 		</div>
 	</form>
+
 	
 {% endif %}
 
-{% if false %}	
-	{{ form.non_field_errors }}
-
-	<form role="form" action="." method="post">{% csrf_token %}
-	{{form.as_p}}
-			<div class="panel-footer">
-				  <button type="submit" class="btn btn-primary pull-right">Submit</button>
-				  <div class="clearfix"></div>
-			</div>
-	</form>
-
-	<form role="form" action="." method="post">{% csrf_token %}
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-				General
-			</div>
-			
-			<div class="panel-body">
-				<div class="row">
-					<div class="col-md-4">
-						<label for="{{form.symbol.label}}">{{form.symbol.label}}</label>
-						<input class="form-control" id="{{form.symbol.id_for_label}}" name="{{form.symbol.name}}">
-					</div>
-
-					
-					<div class="col-md-4">
-						<label>{{form.portfolio.label}}</label>
-						<select class="form-control" id="{{form.portfolio.id_for_label}}" name="{{form.portfolio.name}}">
-
-						{% for choice in form.portfolio.field.choices %}
-
-							{% if choice.0 == form.portfolio.field.initial %}
-								<option selected="selected">{{choice.1}}</option>
-							{% else %}
-								<option value="{{choice.0}}">{{choice.1}}</option>
-							{% endif %}
-							
-						{% endfor %}
-						</select>
-					</div>
-				</div>
-				
-				<div class="row">
-					<div class="col-md-8">
-						<label>{{form.reason.label}}</label>
-						<input class="form-control" id="{{form.reason.id_for_label}}">
-					</div>
-				</div>
-				
-			</div>
-			
-			<div class="panel-footer">
-				  <button type="submit" class="btn btn-primary pull-right">Submit</button>
-				  <div class="clearfix"></div>
-			</div>
-		</div>
-	</form>
-
-{% endif %}
-
-{% if form.id %} 
-	
-	<form role="form">
-		<div class="panel panel-info">
-			<div class="panel-heading">General Panel form</div>
-			<div class="panel-body">
-					<div class="row col-md-4">
-								<label>.col-md-4</label>
-								<input class="form-control" id="field1" placeholder="field1">
-						<div class="col-md-4">
-								<label>.col-md-4</label>
-								<input class="form-control" id="field2" placeholder="field2">
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-6">
-								<label>.col-md-8</label>
-								<input class="form-control" id="field1" placeholder="field1">
-						</div>
-						<div class="col-md-6">
-								<label>.col-md-8</label>
-								<input class="form-control" id="field2" placeholder="field2">
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-4">
-								<label>.col-md-4</label>
-								<input class="form-control" id="field1" placeholder="field1">
-						</div>
-						<div class="col-md-8">
-								<label>.col-md-8</label>
-								<input class="form-control" id="field2" placeholder="field2">
-						</div>
-					</div>
-	
-			</div>
-			<div class="panel-footer">
-				  <button type="submit" class="btn btn-default pull-right">Submit</button>
-				  <div class="clearfix"></div>
-			</div>
-		</div>
-	</form>
-	
-	
-	
-	<div class="panel panel-default">
-	  <div class="panel-heading">
-	    <h3 class="panel-title">Panel title</h3>
-	  </div>
-	  <div class="panel-body">
-	    Panel content
-	  </div>
-	</div>
-
-{% endif %}
 	
 {% endblock %}
 
-<!-- data: [ [ 1396224000000, 88.1 ], [ 1396310400000, 92.27 ], [ 1396396800000, 92.61 ], [ 1396483200000, 90.99 ], [ 1396569600000, 91 ], [ 1396828800000, 89.07 ] ] -->
+

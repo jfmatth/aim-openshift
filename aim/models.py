@@ -119,6 +119,9 @@ class Holding(models.Model):
         return False
 
 
+    def get_absolute_url(self):
+        return "/aim/holding/%s/" % self.id
+
     class Meta:
         unique_together = ("portfolio", "symbol")
 
@@ -326,5 +329,10 @@ class Transaction(models.Model):
     def save(self, force_insert=False, force_update=False):
         super(Transaction, self).save(force_insert, force_update)
         
-        # we are done adding the transaction, not tell the controller.
+        # we are done adding the transaction, now tell the controller.
         self.holding.controller.transaction(transaction=self)
+        
+        
+    def get_absolute_url(self):
+        return "/aim/holding/%s/" % self.holding.id
+

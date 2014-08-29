@@ -29,7 +29,7 @@
 		</thead>
 		
 		<tbody>
-		    {% for h in p.holding_set.all %}
+		    {% for h in p.holding_set.all|dictsort:"symbol" %}
 		    <tr>
 		        <td><a href="{% url "holding_view" h.id %}" >{{ h.symbol }}</a></td>
 		        <td class="text-right">{{ h.shares | floatformat:3 | intcomma }}</td>

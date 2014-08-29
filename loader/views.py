@@ -193,7 +193,7 @@ def LoadAllPrices():
         
         # sniff it out and load it into Symbols.
         ImportPrices( StringIO.StringIO(e.data) )
-        body += e.data.splitlines()[1].split(",")[1] + "\n"
+        body += str(e.exchange) + "-"+ e.data.splitlines()[1].split(",")[1] + "\n"
         e.loaded = True
         e.save()
 
