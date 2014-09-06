@@ -3,6 +3,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import send_mail
+from django.core.mail import mail_admins
 
 import logging
 import csv
@@ -160,9 +162,10 @@ def FormExchange(request, exchange):
 
 
 
-def LoadAll(request):
+def LoadAllExchange():
+    logger.info("LoadAllExchange() starting...")
 
-    c1 = 0
+    n = 0
     
     #load any exchanges
     for e in Exchange.objects.filter(loaded=False):
@@ -170,22 +173,64 @@ def LoadAll(request):
         
         # sniff it out and load it into Symbols.
         ImportExchange( StringIO.StringIO(e.data) )
+        logger.debug("Exchange loaded.")
 
         e.loaded = True
         e.save()
         
-        c1 += 1
+        n += 1
+    
+    return n
 
-    c2 = 0    
+
+def LoadAllPrices():
+    logger.info("LoadAllPrices() starting...")
+
+    n=0
+    body = "Date\n"
+    
     for e in ExchangePrice.objects.filter(loaded=False):
         # we have an exchange that hasn't been loaded.
         
         # sniff it out and load it into Symbols.
         ImportPrices( StringIO.StringIO(e.data) )
-
+        body += str(e.exchange) + "-"+ e.data.splitlines()[1].split(",")[1] + "\n"
         e.loaded = True
         e.save()
-        c2 += 1
+
+        n += 1
+        
+    send_mail("SOTB: %s prices loaded" % n, body, "registration@compunique.com", ["john@compunique.com",], fail_silently=False)
+
+    return n
+
+def LoadAll(request):
+
+    c1 = LoadAllExchange()
+    c2 = LoadAllPrices()
+    
+#     #load any exchanges
+#     for e in Exchange.objects.filter(loaded=False):
+#         # we have an exchange that hasn't been loaded.
+#         
+#         # sniff it out and load it into Symbols.
+#         ImportExchange( StringIO.StringIO(e.data) )
+# 
+#         e.loaded = True
+#         e.save()
+#         
+#         c1 += 1
+# 
+#     c2 = 0    
+#     for e in ExchangePrice.objects.filter(loaded=False):
+#         # we have an exchange that hasn't been loaded.
+#         
+#         # sniff it out and load it into Symbols.
+#         ImportPrices( StringIO.StringIO(e.data) )
+# 
+#         e.loaded = True
+#         e.save()
+#         c2 += 1
 
     return HttpResponse("%s Exchanges Loaded, %s Prices Loaded" % (c1,c2) )
     
@@ -211,6 +256,7 @@ def ExchangeLoader(request, exchange):
             return HttpResponse("Exchange NOT loaded, for invalid")
     else:
         return HttpResponse("GET not supported")
+
 
 @csrf_exempt
 def PricesLoader(request, exchange):

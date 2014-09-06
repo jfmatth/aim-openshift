@@ -9,7 +9,7 @@ import datetime
 # Symbol - Stock Symbol
 #===============================================================================
 class Symbol(models.Model):
-    name        = models.CharField(max_length=10, db_index=True, unique=True)
+    name        = models.CharField(max_length=10, db_index=True, unique=True, blank=False, null=False)
     description = models.CharField(max_length=50, blank=True)
     currentprice = models.OneToOneField('Price', 
                                         related_name = "pricelink", 
@@ -28,11 +28,11 @@ class Symbol(models.Model):
 class Price(models.Model):
     symbol = models.ForeignKey(Symbol)
     
-    date   = models.DateField(db_index=True)
-    high   = models.DecimalField(max_digits=12, decimal_places=3)
-    low    = models.DecimalField(max_digits=12, decimal_places=3)
-    close  = models.DecimalField(max_digits=12, decimal_places=3)
-    volume = models.IntegerField()
+    date   = models.DateField(db_index=True, blank=False)
+    high   = models.DecimalField(max_digits=12, decimal_places=3, blank=False)
+    low    = models.DecimalField(max_digits=12, decimal_places=3, blank=False)
+    close  = models.DecimalField(max_digits=12, decimal_places=3, blank=False)
+    volume = models.IntegerField(blank=False)
     
     def __unicode__(self):
         return "%s %s %s" % (self.symbol.name, self.date, self.close)
@@ -97,6 +97,12 @@ class Holding(models.Model):
             
         return tc
     
+    def roi(self):
+        if self.cost() > 0:
+            return ( self.profit() / self.cost() ) * 100
+        else:
+            return 0
+    
     def profit(self):
         return self.value() - self.cost()
     
@@ -118,6 +124,9 @@ class Holding(models.Model):
         
         return False
 
+
+    def get_absolute_url(self):
+        return "/aim/holding/%s/" % self.id
 
     class Meta:
         unique_together = ("portfolio", "symbol")
@@ -326,5 +335,10 @@ class Transaction(models.Model):
     def save(self, force_insert=False, force_update=False):
         super(Transaction, self).save(force_insert, force_update)
         
-        # we are done adding the transaction, not tell the controller.
+        # we are done adding the transaction, now tell the controller.
         self.holding.controller.transaction(transaction=self)
+        
+        
+    def get_absolute_url(self):
+        return "/aim/holding/%s/" % self.holding.id
+

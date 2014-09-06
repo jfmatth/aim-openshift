@@ -133,7 +133,7 @@ class HoldingUpdateView(UpdateView):
         cd = super(HoldingUpdateView, self).get_context_data(**kwargs)
         
         cd['controlform'] = ControlForm(instance = self.object.controller)
-        
+
         return cd
     
     def get_form_class(self):
@@ -171,7 +171,7 @@ class HoldingDeleteView(DeleteView):
 class TransactionCreate(CreateView):
     model = Transaction
     form_class = TransactionForm
-    success_url = "/aim/"
+#     success_url = "/aim/"
 
     type = None
 

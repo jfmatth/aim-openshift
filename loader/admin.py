@@ -8,7 +8,8 @@ class ExchangeAdmin(admin.ModelAdmin):
 admin.site.register(Exchange, ExchangeAdmin)
 
 class ExchangePriceAdmin(admin.ModelAdmin):
-    pass
+    list_filter = ["loaded",]
+    list_display = ["cdate","exchange", "loaded" ]
 admin.site.register(ExchangePrice, ExchangePriceAdmin)
 
 class PriceErrorAdmin(admin.ModelAdmin):

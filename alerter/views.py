@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.db.models import F
-from django.core.mail import send_mail
+# from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+from django.utils.html import strip_tags
 
 from alerter.models import TradeAlert
 from aim.models import Holding
@@ -62,7 +64,13 @@ def email_alerts():
         mfrom   = "registration@compunique.com"
         mto     = [e.holding.portfolio.owner.email]
          
-        send_mail(subject, message, mfrom, mto, fail_silently=False)
+#         msg = EmailMultiAlternatives(subject, strip_tags(message), mfrom, [mto])
+#         msg.attach_alternative(message, "text/html")
+#         msg.send()
+         
+        e.holding.portfolio.owner.email_user(subject, message,mfrom) 
+                                             
+#         send_mail(subject, message, mfrom, mto, fail_silently=False)
         
         e.emailed = True
         e.save()
