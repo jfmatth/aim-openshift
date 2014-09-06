@@ -216,3 +216,6 @@ DEBUG_TOOLBAR_CONFIG = {'SHOW_TOOLBAR_CALLBACK': 'mysite.settings.returnDEBUG'}
 
 # sites framework
 SITE_ID = 1
+
+
+ADMINS = ( ('John', 'john@compunique.com'),)

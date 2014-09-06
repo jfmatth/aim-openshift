@@ -35,7 +35,7 @@ class HoldingInline(admin.TabularInline):
     model = Holding
 
 class PortfolioAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name', 'owner', 'permission')
 admin.site.register(Portfolio, PortfolioAdmin)
 
 class SymbolAdmin(admin.ModelAdmin):

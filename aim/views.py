@@ -133,7 +133,7 @@ class HoldingUpdateView(UpdateView):
         cd = super(HoldingUpdateView, self).get_context_data(**kwargs)
         
         cd['controlform'] = ControlForm(instance = self.object.controller)
-        
+
         return cd
     
     def get_form_class(self):

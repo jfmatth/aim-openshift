@@ -140,8 +140,9 @@
 				    <!-- general fields here, not editable -->
 					<label>Shares:</label> {{ object.shares | floatformat:3}}
 					<label>Value:</label>  ${{ object.value | floatformat:3}}
-					<label>Cost:</label>   ${{ object.cost | floatformat:3}}
-					<label>Profit:</label> ${{object.profit |floatformat:3}}
+					<label>Cost:</label>   ${{ object.cost  | floatformat:3}}
+					<label>Profit:</label> ${{object.profit | floatformat:3}}
+					<label>ROI:</label>    {{object.roi     | floatformat:3}}%
 				{% endif %}
 				  <input type="submit" name="_holding" class="btn btn-primary pull-right"></button>
 				  <div class="clearfix"></div>

@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
+from django.core.mail import mail_admins
 
 import logging
 import csv
