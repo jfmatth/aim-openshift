@@ -5,6 +5,13 @@ from decimal import Decimal
 
 import datetime
 
+transaction_types=(
+    ("Buy", "Buy Shares"),
+    ("Sell", "Sell Shares"),
+)
+costtype=transaction_types[0][0]
+saletype=transaction_types[1][0]
+
 #===============================================================================
 # Symbol - Stock Symbol
 #===============================================================================
@@ -92,10 +99,18 @@ class Holding(models.Model):
 
     def cost(self):
         tc = 0
-        for t in self.transaction_set.all():
+#        for t in self.transaction_set.all():
+        for t in self.transaction_set.filter(type=costtype):
             tc += t.total_sale()
             
         return tc
+    
+    def sales(self):
+        ts = 0
+        for t in self.transaction_set.filter(type=saletype):
+            ts += t.total_sale()
+            
+        return ts * -1 
     
     def roi(self):
         if self.cost() > 0:
@@ -104,8 +119,8 @@ class Holding(models.Model):
             return 0
     
     def profit(self):
-        return self.value() - self.cost()
-    
+        return self.value() +  self.sales()- self.cost()
+
     def value(self):
         if self.symbol.currentprice:
             return self.shares() * self.symbol.currentprice.close
@@ -296,11 +311,6 @@ class AimController(AimBase):
 #===============================================================================
 # Transaction - Each holding has transactions
 #===============================================================================
-transaction_types=(
-    ("Buy", "Buy Shares"),
-    ("Sell", "Sell Shares"),
-)
-
 class Transaction(models.Model):
     holding        = models.ForeignKey(Holding)
     
