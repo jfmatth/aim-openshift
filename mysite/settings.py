@@ -52,11 +52,12 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'aim',
-    'registration',
+#    'registration',
     'loader',
     'alerter',
     'debug_toolbar',
     'django.contrib.humanize',
+    'users',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -193,15 +194,17 @@ LOGGING = {
 }
 
 # EMAIL settings
+ADMINS = ( ('John', 'john@compunique.com'),)
+
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get("EMAIL_USER", None)
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD", None) 
 
-# registration settings
-REGISTRATION_OPEN = True
-ACCOUNT_ACTIVATION_DAYS = 2
+## registration settings
+#REGISTRATION_OPEN = True
+#ACCOUNT_ACTIVATION_DAYS = 2
 
 # browser settings
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
@@ -218,4 +221,7 @@ DEBUG_TOOLBAR_CONFIG = {'SHOW_TOOLBAR_CALLBACK': 'mysite.settings.returnDEBUG'}
 SITE_ID = 1
 
 
-ADMINS = ( ('John', 'john@compunique.com'),)
+# django-users2
+AUTH_USER_MODEL = 'users.User'
+USERS_CREATE_SUPERUSER = False
+USERS_REGISTRATION_OPEN = True

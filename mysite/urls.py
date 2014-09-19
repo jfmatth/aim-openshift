@@ -15,7 +15,8 @@ urlpatterns = patterns('',
     url(r'^loader/', include('loader.urls') ),
     url(r'^graph/', include('graphs.urls')),
 
-    (r'^accounts/', include('registration.backends.default.urls')), 
+    #(r'^accounts/', include('registration.backends.default.urls')),
+    url(r'^accounts/', include('users.urls')),
     
     url(r'^admin/', include(admin.site.urls)),
 )

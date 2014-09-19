@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.conf import settings
 
 from decimal import Decimal
-
 import datetime
 
 transaction_types=(
@@ -57,7 +57,7 @@ portfolio_perms=(
 )
 class Portfolio(models.Model):
     name  = models.CharField(max_length=50)
-    owner = models.ForeignKey(User, blank=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True)
     permission = models.CharField(max_length=10, choices=portfolio_perms, default="X")              
     
     def __unicode__(self):
