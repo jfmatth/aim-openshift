@@ -1,0 +1,4 @@
+Holding : {{alert.holding.symbol}} - https://{{site.domain}}{{alert.holding.get_absolute_url}}
+Current : {{alert.holding.symbol.currentprice}}
+Buy $   : {{alert.holding.controller.BuyAmount}}
+Sell $  : {{alert.holding.controller.SellAmount}}
