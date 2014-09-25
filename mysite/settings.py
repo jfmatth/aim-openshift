@@ -149,7 +149,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'standard': {
-            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s :%(lineno)s] %(message)s",
             'datefmt' : "%d/%b/%Y %H:%M:%S"
         },
     },
@@ -219,8 +219,12 @@ DEBUG_TOOLBAR_CONFIG = {'SHOW_TOOLBAR_CALLBACK': 'mysite.settings.returnDEBUG'}
 # sites framework
 SITE_ID = 1
 
-
 # django-users2
 AUTH_USER_MODEL = 'users.User'
 USERS_CREATE_SUPERUSER = False
 USERS_REGISTRATION_OPEN = True
+
+
+# FTP information
+FTPLOGIN = os.getenv("FTPLOGIN", None)
+FTPPASS  = os.getenv("FTPPASS", None)

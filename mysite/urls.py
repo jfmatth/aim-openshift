@@ -12,7 +12,7 @@ urlpatterns = patterns('',
     url(r'^$', IndexView.as_view(),name="index" ),
     
     url(r'^aim/', include('aim.urls') ),
-    url(r'^loader/', include('loader.urls') ),
+    #url(r'^loader/', include('loader.urls') ),
     url(r'^graph/', include('graphs.urls')),
 
     #(r'^accounts/', include('registration.backends.default.urls')),

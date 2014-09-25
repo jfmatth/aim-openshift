@@ -16,7 +16,7 @@ class BaseModel(models.Model):
         abstract = True
 
 class Exchange(BaseModel):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, db_index=True)
     data = models.TextField(blank=True, null=True)
     
     loaded = models.BooleanField(default=False)
