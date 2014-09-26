@@ -83,8 +83,5 @@ class Command(BaseCommand):
     help = "Generates and emails all stock alerts"
     
     def handle(self, *args, **options):
-        try:
-            generate_alerts()
-            email_alerts()
-        except:
-            logger.exception("Failure in alerter management command")
+        generate_alerts()
+        email_alerts()
