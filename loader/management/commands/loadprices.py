@@ -23,7 +23,7 @@ from loader.forms import LoaderForm
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-def EODDATA_loader(loaddate):
+def EODDATA_loader(loaddate, history):
     """
     EODDATA_loader - this function downloads the latest exchange list for each list in Exchange(s), then downloads the prices
     for today into ExchangePrice.
@@ -68,9 +68,10 @@ def EODDATA_loader(loaddate):
 
         del(mfile)
 
-    # now grab the prices for today, on each index.
-    ftp.cwd("/")
-
+    if history:
+        ftp.cwd("/History")
+    else:
+        ftp.cwd("/")
 
     for e in Exchange.objects.all():
         mfile = BytesIO()
@@ -248,7 +249,7 @@ def LoadPrices():
 
 
 
-def LoadAll(date=None):
+def LoadAll(date=None, history=False):
     """
     This runs through the daily routine to download the prices via FTP from EODDATA and then load them into the Symbol and Prices tables.
     """
@@ -257,7 +258,7 @@ def LoadAll(date=None):
     
     loaddate = date or datetime.datetime.today()
         
-    EODDATA_loader(loaddate)
+    EODDATA_loader(loaddate, history)
     c1 = LoadExchange()
     c2 = LoadPrices()
     
