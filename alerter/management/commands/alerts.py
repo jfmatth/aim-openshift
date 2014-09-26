@@ -1,10 +1,6 @@
-from django.core.management.base import BaseCommand, CommandError
-from django.shortcuts import render
+from django.core.management.base import BaseCommand
 from django.db.models import F
-# from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
-from django.utils.html import strip_tags
 
 import logging
 
@@ -68,7 +64,6 @@ def email_alerts():
 
         message = render_to_string("alerter/email.txt",ctx)
         mfrom   = "registration@compunique.com"
-        mto     = [e.holding.portfolio.owner.email]
          
 #         msg = EmailMultiAlternatives(subject, strip_tags(message), mfrom, [mto])
 #         msg.attach_alternative(message, "text/html")
