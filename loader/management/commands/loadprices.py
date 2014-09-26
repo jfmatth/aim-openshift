@@ -257,10 +257,11 @@ def LoadAll(date=None, history=False):
     logger.info("Starting LoadAll()")
     
     loaddate = date or datetime.datetime.today()
-        
-    EODDATA_loader(loaddate, history)
-    c1 = LoadExchange()
-    c2 = LoadPrices()
+       
+    if loaddate.weekday() >= 0 and loaddate.weekday() < 5:
+        EODDATA_loader(loaddate, history)
+        c1 = LoadExchange()
+        c2 = LoadPrices()
     
 #send_mail("SOTB: %s prices loaded" % n, body, "registration@compunique.com", ["john@compunique.com",], fail_silently=False)
 
