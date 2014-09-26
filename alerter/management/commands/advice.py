@@ -69,7 +69,7 @@ def email_alerts():
 #         msg.attach_alternative(message, "text/html")
 #         msg.send()
          
-        e.holding.portfolio.owner.email_user(subject, message,mfrom) 
+        e.holding.portfolio.owner.email_user(subject, message, mfrom) 
                                              
 #         send_mail(subject, message, mfrom, mto, fail_silently=False)
         
