@@ -12,3 +12,5 @@ EODDATA/**
 .settings
 db.sqlite3
 *.log
+deployrhc.cmd
+vdjango/

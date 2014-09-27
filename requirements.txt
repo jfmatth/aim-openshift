@@ -1,1 +1,3 @@
 django-debug-toolbar==1.2.1
+django==1.7
+django-users2==0.1.12

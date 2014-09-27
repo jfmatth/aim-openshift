@@ -12,10 +12,11 @@ urlpatterns = patterns('',
     url(r'^$', IndexView.as_view(),name="index" ),
     
     url(r'^aim/', include('aim.urls') ),
-    url(r'^loader/', include('loader.urls') ),
+    #url(r'^loader/', include('loader.urls') ),
     url(r'^graph/', include('graphs.urls')),
 
-    (r'^accounts/', include('registration.backends.default.urls')), 
+    #(r'^accounts/', include('registration.backends.default.urls')),
+    url(r'^accounts/', include('users.urls')),
     
     url(r'^admin/', include(admin.site.urls)),
 )

@@ -7,6 +7,12 @@
 		<a type="button" class="pull-right btn btn-success btn-xs" title="Add Portfolio" href="{% url "portfolio_add" %}">+</a>
 	</h1>
 	
+	<!-- check for no portfolios -->
+	{% if not object_list %}
+		<h2> You have no portfolios, just hit the + sign to get started adding your first one </h2>
+	{% endif %}
+	
+	
     {% for p in object_list %}
    	<h3>
    		<a href="{% url "portfolio_edit" p.id %}"> {{p|capfirst}} </a>

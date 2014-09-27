@@ -1,10 +1,9 @@
 from setuptools import setup
 
-setup(name='AIM on openshift',
+setup(name='Stocks on the Beach',
     version='.01.0',
-    description='Dragon Stocks',
+    description='Easily manage your stock portfolio',
     author='John F. Matthew',
     author_email='john@compunique.com',
-    url='http://www.python.org/sigs/distutils-sig/',
-    install_requires=['Django>=1.6', 'Django<1.7'],
+    url='https://www.stocksonthebeach.com',
 )
