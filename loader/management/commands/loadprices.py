@@ -1,12 +1,7 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 # Create your views here.
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
-from django.db import transaction
-from django.views.decorators.csrf import csrf_exempt
-from django.core.mail import send_mail
-from django.core.mail import mail_admins
 from django.conf import settings
 
 import logging
@@ -18,7 +13,6 @@ from io import BytesIO
 
 from aim.models import Symbol, Price
 from loader.models import Exchange, ExchangePrice, PriceError
-from loader.forms import LoaderForm
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
