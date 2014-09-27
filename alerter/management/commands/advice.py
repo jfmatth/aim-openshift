@@ -69,7 +69,11 @@ def email_alerts():
 #         msg.attach_alternative(message, "text/html")
 #         msg.send()
          
-        e.holding.portfolio.owner.email_user(subject, message, mfrom) 
+         
+        try:
+            e.holding.portfolio.owner.email_user(subject, message, mfrom)
+        except:
+            logger.exception("Error emailing alert to user") 
                                              
 #         send_mail(subject, message, mfrom, mto, fail_silently=False)
         
