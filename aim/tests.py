@@ -5,7 +5,21 @@ from datetime import datetime
 
 from aim.models import Portfolio, Symbol, Price
 
-# Tests seems to be created from bottom up.
+"""
+Tests to be created:
+- Portfolio Form - check for duplicates
+- Holding Form - Check for valid symbols.
+
+
+"""
+
+
+
+
+class VTestCase(TestCase):
+    def test_index(self):
+        resp = self.client.get('/')
+        self.assertEqual(resp.status_code, 200)
 
 class CreateRecordsTests(TestCase):
     

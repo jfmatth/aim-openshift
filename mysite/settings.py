@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import socket
+from django.conf.global_settings import LOGIN_REDIRECT_URL
+from django.core.urlresolvers import reverse_lazy
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # openshift is our PAAS for now.
@@ -181,7 +184,7 @@ LOGGING = {
             'propagate': False,
         },
         'loader': {
-            'handlers': ['logfile'],
+            'handlers': ['logfile', 'mail_admins'],
             'level': 'DEBUG',
         },
         'alerter': {
@@ -234,3 +237,6 @@ USERS_AUTO_LOGIN_ON_ACTIVATION = True
 # FTP information
 FTPLOGIN = os.getenv("FTPLOGIN", None)
 FTPPASS  = os.getenv("FTPPASS", None)
+
+# Where to send users after a login reset
+LOGIN_REDIRECT_URL = reverse_lazy('index')

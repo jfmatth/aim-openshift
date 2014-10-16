@@ -3,6 +3,11 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from aim.models import Portfolio, Holding, Transaction, Symbol, AimController 
 
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 class ControlForm(forms.ModelForm):
     class Meta:
         model = AimController
@@ -35,6 +40,7 @@ class PortfolioForm(forms.ModelForm):
             pass
         else:
             # no exception, meaning duplicate.
+            logger.exception("Portfolioform - duplicate Name")
             raise forms.ValidationError('Portfolio with this Name already exists')
         
         return super(PortfolioForm,self).clean()
@@ -46,11 +52,6 @@ class HoldingForm(forms.ModelForm):
     # define symbol here to override the default ModelChoicefield dropdown list.
     symbol = forms.CharField()
 
-#     def __init__(self, *args, **kwargs):
-#         super(HoldingForm, self).__init__(*args, **kwargs)
-#         
-#         self.fields['portfolio'].required = False
-#         self.fields['portfolio'].widget.attrs['disabled'] = True 
 
     def clean_symbol(self):
         # Since symbol needs to be a symbol object, use the clean
@@ -58,6 +59,7 @@ class HoldingForm(forms.ModelForm):
         try:
             return Symbol.objects.get(name__iexact=self.cleaned_data['symbol'])
         except ObjectDoesNotExist:
+            logger.exception("HoldingForm - Invalid symbol")
             raise forms.ValidationError("Invalid symbol")
 
     class Meta:
