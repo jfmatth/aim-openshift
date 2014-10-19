@@ -1,4 +1,4 @@
-Holding : <a href "https://{{site.domain}}{{alert.holding.get_absolute_url}}"{{alert.holding.symbol}} </a>
+Holding : {{alert.holding.symbol}}
 Current Price : {{alert.holding.symbol.currentprice}}
 Buy $   : {{alert.holding.controller.BuyAmount}}
 Sell $  : {{alert.holding.controller.SellAmount}}
