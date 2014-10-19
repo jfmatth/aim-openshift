@@ -2,6 +2,8 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
+from django.core.mail import mail_admins
+from django.contrib.sites.models import Site
 
 import logging
 import csv
@@ -12,6 +14,7 @@ from io import BytesIO
 
 from aim.models import Symbol, Price
 from loader.models import Exchange, ExchangePrice, PriceError
+
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -24,9 +27,8 @@ def EODDATA_loader(loaddate, history):
     """
     # Load todays prices from FTP EODDATA.com
 
-    logger.info("Starting EODDATA_loader()")
+    logger.info("EODDATA_loader() start")
 
-#    datestr = loaddatedatetime.datetime.today().strftime("%Y%m%d")
     datestr = loaddate.strftime("%Y%m%d")
     logger.info("Getting ready to load Exchanges / Prices for %s" % datestr )
     
@@ -49,7 +51,6 @@ def EODDATA_loader(loaddate, history):
 
             ftp.retrbinary("RETR %s" % exchangefile, mfile.write)
 
-            # mfile holds the index, write it to the e record, and move on.
             e.data = mfile.getvalue()
             e.loaded = False
             e.save()
@@ -73,7 +74,6 @@ def EODDATA_loader(loaddate, history):
             
             logger.debug("Retreiving prices Exchange %s" % pricefile)
 
-# i could improve this by using the date field on Exchangeprice and do a get_or_create call and skip it if it's a get return.
             ftp.retrbinary("RETR %s" % pricefile, mfile.write )
             
             p = ExchangePrice(exchange=e, data=mfile.getvalue(), loaded=False )
@@ -88,7 +88,7 @@ def EODDATA_loader(loaddate, history):
     logger.debug("ftp quit")            
     ftp.quit()
 
-    logger.info("Complete EODDATA_loader()")
+    logger.info("EODDATA_loader() complete")
 
 
 def ProcessExchange(f):
@@ -96,7 +96,7 @@ def ProcessExchange(f):
     ProcessExchange - Given a string (typcically the text from EODDATA for an Exchange file, import them into the Symbols list )
     """
     
-    logger.info("Starting ProcessExchange()")
+    logger.info("ProcessExchange() start")
     
     dialect = csv.Sniffer().sniff( f.read(1024) )
     f.seek(0)
@@ -116,7 +116,7 @@ def ProcessExchange(f):
     except:
         print "Error loading %s" % csvline
 
-    logger.info("Complete ProcessExchange()")
+    logger.info("ProcessExchange() complete")
 
 
 
@@ -125,7 +125,7 @@ def LoadExchange():
     LoadExchange - Gets all the records in Exchange that haven't been loaded, and process' them into the Symbols table.
     """
     
-    logger.info("Starting LoadExchange()")
+    logger.info("LoadExchange() start")
     
     count = 0
     
@@ -140,7 +140,7 @@ def LoadExchange():
         
         count += 1
 
-    logger.info("Complete LoadExchange()")
+    logger.info("LoadExchange() complete")
 
     return count
 
@@ -151,7 +151,7 @@ def ProcessPrices(f, headers=False):
     Given a string F, Import a file f into the prices table.
     """
     
-    logger.info("Starting ProcessPrices()")
+    logger.info("ProcessPrices() start")
     
     dialect = csv.Sniffer().sniff( f.read(1024) )
     f.seek(0)
@@ -166,13 +166,9 @@ def ProcessPrices(f, headers=False):
     # add import improvement. 
     datecheck = None
     count = 0
-
+    
     logger.info("Start processing prices ...")
     for csvline in reader:
-
-        ## skip the header.
-        #if csvline[0] == "Symbol":
-        #    continue
 
         d = datetime.datetime.strptime(csvline[1], "%Y%m%d").date()
 
@@ -210,19 +206,19 @@ def ProcessPrices(f, headers=False):
                     sym.save()
     
             except ObjectDoesNotExist:
-                logger.error("Problem with %s" % csvline)
                 # add this to the price error if necessary
                 p, c = PriceError.objects.get_or_create(symbolname = csvline[0] )
                 
                 
-    logger.info("Complete ProcessPrices()")
+    logger.info("ProcessPrices() complete")
 
+    return count
 
 def LoadPrices():
     """
     Gets all ExchangePrice records that haven't been loaded, and processes them.
     """
-    logger.info("Starting LoadPrices()")
+    logger.info("LoadPrices() start")
 
     count=0
     
@@ -230,13 +226,13 @@ def LoadPrices():
         # we have an exchange that hasn't been loaded.
         
         # sniff it out and load it into Symbols.
-        ProcessPrices( StringIO.StringIO(e.data) )
+        n = ProcessPrices( StringIO.StringIO(e.data) )
         e.loaded = True
         e.save()
 
-        count += 1
+        count += n
 
-    logger.info("Complete LoadPrices()")
+    logger.info("LoadPrices() complete")
 
     return count
 
@@ -247,7 +243,7 @@ def LoadAll(date=None, history=False):
     This runs through the daily routine to download the prices via FTP from EODDATA and then load them into the Symbol and Prices tables.
     """
 
-    logger.info("Starting LoadAll()")
+    logger.info("LoadAll() Start")
     
     loaddate = date or datetime.datetime.today()
        
@@ -256,10 +252,15 @@ def LoadAll(date=None, history=False):
         c1 = LoadExchange()
         c2 = LoadPrices()
     
-#send_mail("SOTB: %s prices loaded" % n, body, "registration@compunique.com", ["john@compunique.com",], fail_silently=False)
-
-    logger.info("Complete LoadAll()")
-
+        cs = Site.objects.get_current()
+        
+        subject = "%s - %s Prices Loaded" % (cs.domain, cs.name)
+        body = "%s Exchanges loaded, %s prices loaded" % (c1, c2)    
+        mail_admins(subject, body)
+        
+    logger.info("LoadAll() complete")
+    
+    
 
 # turn this into a management command.
 class Command(BaseCommand):
@@ -267,11 +268,6 @@ class Command(BaseCommand):
     help = "loads all stock prices for <date>"
     
     def handle(self, *args, **options):
-        self.stdout.write("calling LoadAll()")
+        self.stdout.write("Loadprices.py - calling LoadAll()")
         LoadAll()
-        self.stdout.write("handle called")
-    
-    
-    
-
-
+        self.stdout.write("Loadprices.py - Complete")
