@@ -1,5 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.db.models import F
+from django.conf import settings
+
 from django.template.loader import render_to_string
 
 import logging
@@ -12,35 +14,11 @@ import time
 logger = logging.getLogger(__name__)
 
 def generate_alerts():
-    #===========================================================================
-    # # scans through the environment and generates any stock alerts that are needed.
-    # 
-    # ALERT_DESC = "%s.\nCurrent Price %s.\nCurrent Buy Amount %s.\nCurrent Sell Amount %s\n"
-    # 
-    # # our starting list ( needs to be optimized).  Only pick holdings that aren't already alerted for
-    # # emailed or not.
-    # alertlist = Holding.objects.exclude(currentalert=None).exclude(tradealert__alert=F("currentalert") )
-    # 
-    # for h in alertlist:
-    #     # see if these
-    #     if h.alert():
-    #         # this holding has an alert that hasn't been emailed before
-    #         ta = TradeAlert()
-    #         ta.holding = h
-    #         ta.alert = h.currentalert
-    #         ta.date = time.strftime("%Y-%m-%d")
-    #         ta.description = ALERT_DESC % (h.currentalert, 
-    #                                        h.symbol.currentprice, 
-    #                                        h.controller.BuyAmount(), 
-    #                                        h.controller.SellAmount()
-    #                                     )
-    #         ta.save()
-    #===========================================================================
-    # scans through the environment and generates any stock alerts that are needed.
-    
+
+    logger.info("generate_alerts() - Start")    
+
     # our starting list ( needs to be optimized).  Only pick holdings that aren't already alerted for
     # emailed or not.
-
     alertlist = Holding.objects.exclude(currentalert=None).exclude(tradealert__alert=F("currentalert") )
     
     for h in alertlist:
@@ -48,14 +26,19 @@ def generate_alerts():
         
         if h.alert():
             # this holding has an alert that hasn't been emailed before
+            logger.debug("Alert found for %s" % h)
             ta = TradeAlert()
             ta.holding = h
             ta.alert = h.currentalert
             ta.date = time.strftime("%Y-%m-%d")
             ta.save()
 
+    logger.info("generate_alerts() - End")    
+
 
 def email_alerts():
+    logger.info("email_alerts() - Start")
+    
     for e in TradeAlert.objects.filter(emailed=False):
         ctx = {"alert" : e}
         
@@ -63,24 +46,20 @@ def email_alerts():
         subject = ''.join(subject.splitlines())
 
         message = render_to_string("alerter/email.txt",ctx)
-        mfrom   = "registration@compunique.com"
-         
-#         msg = EmailMultiAlternatives(subject, strip_tags(message), mfrom, [mto])
-#         msg.attach_alternative(message, "text/html")
-#         msg.send()
-         
+
+        mfrom = settings.EMAIL_HOST_USER
          
         try:
             e.holding.portfolio.owner.email_user(subject, message, mfrom)
+            e.emailed = True
+            e.save()
+            logger.debug("Emailed user %s" % subject)
+            
         except:
             logger.exception("Error emailing alert to user") 
-                                             
-#         send_mail(subject, message, mfrom, mto, fail_silently=False)
-        
-        e.emailed = True
-        e.save()
-        
 
+    logger.info("email_alerts() - End")
+                                             
 
 class Command(BaseCommand):
     args = None

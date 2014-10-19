@@ -1,9 +1,14 @@
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 
 from aim.forms import PortfolioForm, ControlForm, HoldingForm, TransactionForm
 from aim.models import Portfolio, Holding, Transaction, HoldingAlert
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 #===============================================================================
 # Index page /
@@ -86,18 +91,18 @@ class HoldingCreateView(CreateView):
     def get_form(self, form_class):
         form = super(HoldingCreateView, self).get_form(form_class)
         
-        portfolio = Portfolio.objects.get(pk=self.kwargs['portid'])
-        if portfolio.owner != self.request.user:
-            raise ObjectDoesNotExist
+        try:        
+            portfolio = Portfolio.objects.get(pk=self.kwargs['portid'])
+            if portfolio.owner != self.request.user:
+                raise ObjectDoesNotExist
+            
+            form.instance.portfolio = portfolio
+            return form
         
-        form.instance.portfolio = portfolio 
+        except:
+            logger.exception("get_form() exception, portid= %s" % self.kwargs['portid'] )
+            raise Http404  
        
-#         # setup the available portfolios and the inital value if any for this holding
-#         form.fields['portfolio'].queryset = Portfolio.objects.filter(owner=self.request.user)
-#         form.fields['portfolio'].initial = self.kwargs.get("portid", None)
-#         
-        return form
-    
     
 class HoldingUpdateView(UpdateView):
     template_name = "aim/HoldingView.html"
@@ -209,6 +214,3 @@ class TransactionDeleteView(DeleteView):
     def get_queryset(self):
         return Transaction.objects.filter(holding__portfolio__owner=self.request.user)
 
-    
-    
-    
