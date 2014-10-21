@@ -18,9 +18,3 @@ class TradeAlert(models.Model):
     emailed = models.BooleanField(default=False)  # was it emailed
 
 
-## some testing i did
-#
-# get a list of all holdings that don't already have this alert, regardless of email status.
-# hl = Holding.objects.exclude(currentalert=None).exclude(tradealert__alert=F("currentalert") )
-# 
-# add them as new alerts to the system via new TradeAlerts
