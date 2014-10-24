@@ -43,6 +43,8 @@ class PortfolioForm(forms.ModelForm):
             logger.exception("Portfolioform - duplicate Name")
             raise forms.ValidationError('Portfolio with this Name already exists')
         
+               
+        
         return super(PortfolioForm,self).clean()
 
 
@@ -51,7 +53,6 @@ class PortfolioForm(forms.ModelForm):
 class HoldingForm(forms.ModelForm):
     # define symbol here to override the default ModelChoicefield dropdown list.
     symbol = forms.CharField()
-
 
     def clean_symbol(self):
         # Since symbol needs to be a symbol object, use the clean
@@ -62,6 +63,19 @@ class HoldingForm(forms.ModelForm):
             logger.exception("HoldingForm - Invalid symbol")
             raise forms.ValidationError("Invalid symbol")
 
+    def clean(self):
+        clean_data = super(HoldingForm, self).clean()
+        
+        try:
+            Holding.objects.get(symbol=clean_data['symbol'], portfolio=self.instance.portfolio)
+        except:
+            pass
+        else:
+            logger.exception("HoldingForm - Duplicate symbol in portfolio")
+            raise forms.ValidationError("Duplicate symbol")
+ 
+        return super(HoldingForm, self).clean()
+    
     class Meta:
         model = Holding
         fields = ('symbol', 'reason' )
