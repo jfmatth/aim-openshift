@@ -91,17 +91,18 @@ class HoldingCreateView(CreateView):
     def get_form(self, form_class):
         form = super(HoldingCreateView, self).get_form(form_class)
         
-        try:        
+        try:
+            # validate that this user owns this portfolio        
             portfolio = Portfolio.objects.get(pk=self.kwargs['portid'])
             if portfolio.owner != self.request.user:
                 raise ObjectDoesNotExist
-            
+        
             form.instance.portfolio = portfolio
             return form
         
         except:
             logger.exception("get_form() exception, portid= %s" % self.kwargs['portid'] )
-            raise Http404  
+            raise Http404               
        
     
 class HoldingUpdateView(UpdateView):
