@@ -52,6 +52,10 @@ urlpatterns = patterns('',
     url(r'^transaction/delete/(?P<pk>\d+)/$',
         login_required(TransactionDeleteView.as_view()),
         name="transaction_delete"),
+                       
+    url(r'amiok/$',
+        TemplateView.as_view(template_name="aim/amiok.html")
+        ),
 
                          
 )
