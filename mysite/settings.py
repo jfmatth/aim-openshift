@@ -81,6 +81,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 if ON_PAAS:
+    # jfm, added CONN_MAX_AGE for persistent connections into Postgres.  See https://docs.djangoproject.com/en/1.6/ref/settings/#conn-max-age
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',  
@@ -89,6 +90,7 @@ if ON_PAAS:
             'PASSWORD': os.environ['OPENSHIFT_POSTGRESQL_DB_PASSWORD'],
             'HOST':     os.environ['OPENSHIFT_POSTGRESQL_DB_HOST'],
             'PORT':     os.environ['OPENSHIFT_POSTGRESQL_DB_PORT'],
+            'CONN_MAX_AGE':  600,
         }
     }
 else:
