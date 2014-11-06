@@ -58,7 +58,7 @@ def EODDATA_loader(loaddate, history):
             logger.debug("%s retrieved and saved" % exchangefile)
 
         except:
-            logger.exception("Error retreiving index %s" % e.name)
+            logger.exception("Current datetime = $s, Error retreiving index %s" % (datetime.datetime.today(), e.name))
 
         del(mfile)
 
