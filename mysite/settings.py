@@ -191,7 +191,7 @@ LOGGING = {
         },
         'alerter': {
             'handlers': ['logfile'],
-            'level': 'DEBUG',
+            'level': 'INFO',
         },
         'aim': {
             'handlers': ['console', 'logfile'],
