@@ -2,12 +2,14 @@
 from django.views.generic import ListView
 from aim.models import Symbol
 
+DAYS_5YRS = 260 * 5
+
 # Create your views here.
 class graphview(ListView):
     template_name = "graphs/graphview.html"
 
     def get_queryset(self):
-        return Symbol.objects.get(name=self.kwargs['symbol']).price_set.order_by('date')
+        return Symbol.objects.get(name=self.kwargs['symbol']).price_set.order_by('date')[0:DAYS_5YRS]
 
 class testgraphview(ListView):
     template_name = "graphs/testgraph.html"
