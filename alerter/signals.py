@@ -1,6 +1,7 @@
 from users.signals import user_registered, user_activated
 from django.dispatch import receiver
 from django.core.mail import mail_admins
+from django.contrib.auth.signals import user_logged_in
 
 import logging
 logger = logging.getLogger(__name__)
@@ -18,3 +19,8 @@ def activated_callback(sender, **kwargs):
     
     mail_admins("User Activated %s" % kwargs['user'], str(kwargs['request']))
 
+
+@receiver(user_logged_in)
+def login_callback(sender, user, request, **kwargs):
+    logger.info("User %s Logged in", user)
+    
