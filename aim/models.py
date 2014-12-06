@@ -33,8 +33,8 @@ class Symbol(models.Model):
 # Price - Stock price 1-N back to Symbol
 #===============================================================================
 class Price(models.Model):
+
     symbol = models.ForeignKey(Symbol)
-    
     date   = models.DateField(db_index=True, blank=False)
     high   = models.DecimalField(max_digits=12, decimal_places=3, blank=False)
     low    = models.DecimalField(max_digits=12, decimal_places=3, blank=False)
@@ -43,7 +43,20 @@ class Price(models.Model):
     
     def __unicode__(self):
         return "%s %s %s" % (self.symbol.name, self.date, self.close)
-    
+
+
+    def save(self, force_insert=False, force_update=False):
+        # update the current price of this symbol, if necessary    
+        if self.id == None:
+            super(Price, self).save(force_insert, force_update)
+            # new record
+            if self.symbol.currentprice == None or self.date > self.symbol.currentprice.date: 
+                self.symbol.currentprice = self
+                self.symbol.save()
+        else:
+            super(Price, self).save(force_insert, force_update)
+
+        
     def jsdate(self):
         return int( (datetime.datetime.fromordinal(self.date.toordinal() )-datetime.datetime(1970,1,1)).total_seconds() * 1000 )
  
@@ -126,7 +139,7 @@ class Holding(models.Model):
             return self.shares() * self.symbol.currentprice.close
         else:
             return 0
-        
+
     def alert(self):
         # if there is a buy or sell alert on this holding, this will be true
         if not self.currentalert == None:
@@ -138,7 +151,6 @@ class Holding(models.Model):
                     return True
         
         return False
-
 
     def get_absolute_url(self):
         return "/aim/holding/%s/" % self.id

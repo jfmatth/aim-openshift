@@ -37,7 +37,7 @@ def EODDATA_loader(loaddate, history):
         logger.debug("FTP Login as %s" % settings.FTPLOGIN)
         ftp.login(settings.FTPLOGIN, settings.FTPPASS)
     except:
-        logger.exception("Error logging into FTP")
+        logger.debug("Error logging into FTP")
     
     # loop over all Indexes, grabbing the latest exchange and then loading the prices we need.
     ftp.cwd("Names")
@@ -58,7 +58,7 @@ def EODDATA_loader(loaddate, history):
             logger.debug("%s retrieved and saved" % exchangefile)
 
         except:
-            logger.exception("Current datetime = $s, Error retreiving index %s" % (datetime.datetime.today(), e.name))
+            logger.debug("Current datetime = $s, Error retreiving index %s" % (datetime.datetime.today(), e.name))
 
         del(mfile)
 
@@ -81,12 +81,16 @@ def EODDATA_loader(loaddate, history):
             
             logger.debug("%s Prices Saved" % pricefile)
         except:
-            logger.exception("error retreiving %s" % pricefile)
+            logger.debug("error retreiving %s" % pricefile)
 
         del(mfile)
 
     logger.debug("ftp quit")            
     ftp.quit()
+
+    ftp = None
+    mfile = None
+    p = None
 
     logger.info("EODDATA_loader() complete")
 
@@ -114,7 +118,7 @@ def ProcessExchange(f):
             if created:
                 logger.debug("Created")
     except:
-        print "Error loading %s" % csvline
+        logger.debug("Error loading %s" % csvline)
 
     logger.info("ProcessExchange() complete")
 
@@ -177,6 +181,7 @@ def ProcessPrices(f, headers=False):
             # this date and use it for quick checking.
             logger.debug("datecheck = %s" % d)
             datecheck = d
+            
             symbollist = set(Price.objects.filter(date=d).values_list("symbol__name", flat=True))
             logger.debug("sybollist populated")
 
@@ -200,17 +205,16 @@ def ProcessPrices(f, headers=False):
                 
                 count += 1
                 
-                # check if this price upload is 'newer' than the symbols current price
-                if sym.currentprice == None or p.date > sym.currentprice.date:
-                    sym.currentprice = p
-                    sym.save()
-    
             except ObjectDoesNotExist:
                 # add this to the price error if necessary
                 p, c = PriceError.objects.get_or_create(symbolname = csvline[0] )
                 
                 
     logger.info("ProcessPrices() complete")
+
+    reader = None
+    symbollist = None
+    
 
     return count
 
@@ -254,9 +258,11 @@ def LoadAll(date=None, history=False):
     
         cs = Site.objects.get_current()
         
-        subject = "%s - %s Prices Loaded" % (cs.domain, cs.name)
+        subject = "%s - %s Prices Loaded for %s" % (cs.domain, cs.name, loaddate)
         body = "%s Exchanges loaded, %s prices loaded" % (c1, c2)    
         mail_admins(subject, body)
+    else:
+        logger.info("Skipping weekend %s" % loaddate)
         
     logger.info("LoadAll() complete")
     

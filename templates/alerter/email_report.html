@@ -1,0 +1,46 @@
+<html>
+<head>
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;border-color:#aabcfe;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#669;background-color:#e8edff;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#039;background-color:#b9c9fe;}
+.tg .tg-vn4c{background-color:#D2E4FC}
+</style>
+</head>
+<body>
+
+<center><h1>Current Portfolio Advice</h1></center>
+
+<table class="tg">
+	<tr>
+		<th class="tg-031e">Portfolio</th>
+		<th class="tg-031e">Symbol</th>
+		<th class="tg-031e">Current Price</th>
+		<th class="tg-031e">Buy @</th>
+		<th class="tg-031e">Sell @</th>
+	</tr>
+
+{% for h in alert_set %}
+	<tr>
+		{% ifchanged h.portfolio %}
+		<td class="tg-vn4c">{{h.portfolio}}</td>
+		{% else %}
+		<td class="tg-vn4c"></td>
+		{% endifchanged %}
+	
+		<td class="tg-vn4c">{{h.symbol}}</td>
+		<td class="tg-vn4c">{{h.symbol.currentprice.close}}</td>
+		{% if h.symbol.currentprice.close < h.currentalert.buyprice %}
+		<td class="tg-vn4c"><a href="{% url 'transaction_buy' h.id %}" >{{ h.currentalert.buyprice | floatformat:3 }}</a> </td>
+		<td class="tg-vn4c"><td>
+	    {% else %}
+		<td class="tg-vn4c"></td>
+		<td class="tg-vn4c"><a href="{% url 'transaction_sell' h.id %}">{{ h.currentalert.sellprice | floatformat:3}}</a> </td>
+	    {% endif %}
+	<tr>
+
+{% endfor %}
+
+</table>
+	
+</body></html>
