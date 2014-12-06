@@ -46,11 +46,8 @@ def do_alerts():
         if alert_set:
             ctx = {"alert_set" : alert_set }
             message = render_to_string("alerter/email_report.html",ctx)
-# 
-#                 mfrom = settings.EMAIL_HOST_USER
-#                 send_mail(subject="Subject", message=None, html_message=message, from_email=mfrom, recipient_list=[u.email,])
-#===============================================================================
-            print message
+            mfrom = settings.EMAIL_HOST_USER
+            send_mail(subject="Subject", message=None, html_message=message, from_email=mfrom, recipient_list=[u.email,])
                 
 #                u.email_user("subject", message, mfrom)
 
