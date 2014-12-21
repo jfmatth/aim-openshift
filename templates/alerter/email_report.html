@@ -11,39 +11,40 @@
 		</style>
 	</head>
 
-	<body>	<center><h1>Current Portfolio Advice</h1></center>
+	<body  style="margin: 0; padding: 0;">
+		<center><h1>Current Portfolio Advice</h1></center>
 	
-	<table class="tg">
-		<tr>
-			<th class="tg-031e">Portfolio</th>
-			<th class="tg-031e">Symbol</th>
-			<th class="tg-031e">Current Price</th>
-			<th class="tg-031e">Buy @</th>
-			<th class="tg-031e">Sell @</th>
-		</tr>
-	
-	{% for h in alert_set %}
-		<tr>
-			{% ifchanged h.portfolio %}
-			<td class="tg-vn4c">{{h.portfolio}}</td>
-			{% else %}
-			<td class="tg-vn4c"></td>
-			{% endifchanged %}
+		<table align="center" border="1" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;" class="tg">
+			<tr>
+				<th class="tg-031e">Portfolio</th>
+				<th class="tg-031e">Symbol</th>
+				<th class="tg-031e">Current Price</th>
+				<th class="tg-031e">Buy @</th>
+				<th class="tg-031e">Sell @</th>
+			</tr>
 		
-			<td class="tg-vn4c">{{h.symbol}}</td>
-			<td class="tg-vn4c">{{h.symbol.currentprice.close}}</td>
-			{% if h.symbol.currentprice.close < h.currentalert.buyprice %}
-			<td class="tg-vn4c"><a href="{% url 'transaction_buy' h.id %}" >{{ h.currentalert.buyprice | floatformat:3 }}</a> </td>
-			<td class="tg-vn4c"><td>
-		    {% else %}
-			<td class="tg-vn4c"></td>
-			<td class="tg-vn4c"><a href="{% url 'transaction_sell' h.id %}">{{ h.currentalert.sellprice | floatformat:3}}</a> </td>
-		    {% endif %}
-		<tr>
-	
-	{% endfor %}
-	
-	</table>
+		{% for h in alert_set %}
+			<tr>
+				{% ifchanged h.portfolio %}
+				<td class="tg-vn4c">{{h.portfolio}}</td>
+				{% else %}
+				<td class="tg-vn4c"></td>
+				{% endifchanged %}
+			
+				<td class="tg-vn4c">{{h.symbol}}</td>
+				<td class="tg-vn4c">{{h.symbol.currentprice.close}}</td>
+				{% if h.symbol.currentprice.close < h.currentalert.buyprice %}
+				<td class="tg-vn4c"><a href="{% url 'transaction_buy' h.id %}" >{{ h.currentalert.buyprice | floatformat:3 }}</a> </td>
+				<td class="tg-vn4c"><td>
+			    {% else %}
+				<td class="tg-vn4c"></td>
+				<td class="tg-vn4c"><a href="{% url 'transaction_sell' h.id %}">{{ h.currentalert.sellprice | floatformat:3}}</a> </td>
+			    {% endif %}
+			<tr>
 		
+		{% endfor %}
+		
+		</table>
+			
 	</body>
 </html>
