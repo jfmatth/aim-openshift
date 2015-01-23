@@ -74,8 +74,9 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'mysite.urls'
 
-WSGI_APPLICATION = 'mysite.wsgi.application'
+# JFM, removed 1/21/15 due to the way OS maps WGSI stuff.
 
+#WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases

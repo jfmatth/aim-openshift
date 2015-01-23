@@ -3,6 +3,8 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 import logging
+import datetime
+
 from users.models import User
 
 logger = logging.getLogger(__name__)
@@ -33,11 +35,17 @@ def do_alerts():
             ctx = {"alert_set" : alert_set }
             message = render_to_string("alerter/email_report.html",ctx)
             mfrom = settings.EMAIL_HOST_USER
-            send_mail(subject="Subject", message=None, html_message=message, from_email=mfrom, recipient_list=[u.email,])
+            send_mail(subject="Portfolio alerts", message=None, html_message=message, from_email=mfrom, recipient_list=[u.email,])
 
 class Command(BaseCommand):
     args = None
     help = "Generates and emails all stock alerts"
     
     def handle(self, *args, **options):
-        do_alerts()
+
+        # only send alerts during the week.
+        loaddate = datetime.datetime.today()
+        if loaddate.weekday() >= 0 and loaddate.weekday() < 5:
+            do_alerts()
+            
+            
