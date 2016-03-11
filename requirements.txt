@@ -1,4 +1,4 @@
 django-debug-toolbar==1.2.1
 django>=1.7,<1.8
 django-users2==0.1.13
-gunicorn
+gunicorn==19.3.0
