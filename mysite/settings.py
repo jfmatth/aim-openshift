@@ -43,7 +43,7 @@ if ON_PAAS:
     ALLOWED_HOSTS = [os.environ['OPENSHIFT_APP_DNS'], socket.gethostname()] + WWWNAME
 else:
     ALLOWED_HOSTS = []
-    
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -81,30 +81,35 @@ ROOT_URLCONF = 'mysite.urls'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
-if ON_PAAS:
-    # jfm, added CONN_MAX_AGE for persistent connections into Postgres.  See https://docs.djangoproject.com/en/1.6/ref/settings/#conn-max-age
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',  
-            'NAME':     os.environ['OPENSHIFT_APP_NAME'],
-            'USER':     os.environ['OPENSHIFT_POSTGRESQL_DB_USERNAME'],
-            'PASSWORD': os.environ['OPENSHIFT_POSTGRESQL_DB_PASSWORD'],
-            'HOST':     os.environ['OPENSHIFT_POSTGRESQL_DB_HOST'],
-            'PORT':     os.environ['OPENSHIFT_POSTGRESQL_DB_PORT'],
-            'CONN_MAX_AGE':  600,
-        }
-    }
-else:
-    # stock django
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
+# if ON_PAAS:
+#     # jfm, added CONN_MAX_AGE for persistent connections into Postgres.  See https://docs.djangoproject.com/en/1.6/ref/settings/#conn-max-age
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#             'NAME':     os.environ['OPENSHIFT_APP_NAME'],
+#             'USER':     os.environ['OPENSHIFT_POSTGRESQL_DB_USERNAME'],
+#             'PASSWORD': os.environ['OPENSHIFT_POSTGRESQL_DB_PASSWORD'],
+#             'HOST':     os.environ['OPENSHIFT_POSTGRESQL_DB_HOST'],
+#             'PORT':     os.environ['OPENSHIFT_POSTGRESQL_DB_PORT'],
+#             'CONN_MAX_AGE':  600,
+#         }
+#     }
+# else:
+#     # stock django
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#         }
+#     }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
+
+DATABASES = {
+    'default': database.config()
+}
+
 
 LANGUAGE_CODE = 'en-us'
 
@@ -139,8 +144,6 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(BASE_DIR, 'templates'),
 )
-
-
 
 
 if ON_PAAS:
@@ -209,7 +212,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get("EMAIL_USER", None)
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD", None) 
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD", None)
 
 ## registration settings
 #REGISTRATION_OPEN = True
